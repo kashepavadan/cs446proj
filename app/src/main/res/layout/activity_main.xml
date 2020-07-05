@@ -12,8 +12,17 @@
     android:layout_height="match_parent"
     >
 
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+
     <Button
-        android:id="@+id/button"
+        android:id="@+id/startGame"
         android:layout_width="250dp"
 
         android:layout_height="60dp"
@@ -23,7 +32,7 @@
         android:text="@string/start_game"
         android:textAllCaps="false"
         android:textColor="#ffffff"
-        app:layout_constraintBottom_toTopOf="@+id/button_1"
+        app:layout_constraintBottom_toTopOf="@+id/navigateProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,23 +40,24 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
-        android:id="@+id/button_1"
+        android:id="@+id/navigateProfile"
         android:layout_width="250dp"
         android:layout_height="60dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:textColor="#ffffff"
-        android:text="@string/settings"
+        android:text="@string/profile"
         android:textAllCaps="false"
         android:background="@drawable/custom_main_button"
-        app:layout_constraintBottom_toTopOf="@+id/button_2"
+        android:onClick="navigateProfile"
+        app:layout_constraintBottom_toTopOf="@+id/nvaigateHelp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/startGame" />
 
     <Button
-        android:id="@+id/button_2"
+        android:id="@+id/nvaigateHelp"
         android:layout_width="250dp"
         android:layout_height="60dp"
         android:textColor="#ffffff"
@@ -56,10 +66,11 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/custom_main_button"
+        android:onClick="navigateHelp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_1"
+        app:layout_constraintTop_toBottomOf="@+id/navigateProfile"
         android:textAllCaps="false"/>
 
     <TextView
