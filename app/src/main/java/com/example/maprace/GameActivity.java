@@ -18,6 +18,8 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.IMyLocationConsumer;
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
@@ -26,12 +28,13 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class GameActivity extends AppCompatActivity {
 
     private static final String[] requiredPermissions = { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE };
 
     private MapView mapView = null;
+    private Location currentLocation = null;
+    private Landmark[] landmarks = {};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class GameActivity extends AppCompatActivity {
         requestPermissions();
 
         initMap();
+        initLandmarks();
     }
 
     @Override
@@ -76,11 +80,32 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(Location location, IMyLocationProvider source) {
                 myLocationOverlay.onLocationChanged(location, source);
-                mapController.setCenter(new GeoPoint(location.getLatitude(), location.getLongitude()));
+                if (currentLocation == null) {
+                    mapController.setCenter(new GeoPoint(location.getLatitude(), location.getLongitude()));
+                }
+                currentLocation = location;
             }
         });
-
         mapController.setZoom(18L);
+    }
+
+    private void initLandmarks() {
+        if (this.landmarks.length != 0) return;
+        // Initialize Landmarks
+        // TODO: Fetch data from somewhere
+        this.landmarks = new Landmark[]{
+                new Landmark("Davis Center", new GeoPoint(43.472482, -80.542116))
+        };
+        // Add marker to map
+        if (this.mapView != null) {
+            List<Overlay> mapOverlays = this.mapView.getOverlays();
+            LandmarkOverlay landmarkOverlay = new LandmarkOverlay(getDrawable(R.drawable.marker), mapView);
+            for (Landmark landmark: this.landmarks) {
+                OverlayItem overlayItem = new OverlayItem(landmark.getName(), "", landmark.getLocation());
+                landmarkOverlay.addOverlayItem(overlayItem);
+            }
+            mapOverlays.add(landmarkOverlay);
+        }
     }
 
     private void requestPermissions() {
