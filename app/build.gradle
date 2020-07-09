@@ -36,4 +36,5 @@ dependencies {
     implementation 'org.osmdroid:osmdroid-wms:6.1.6'
     implementation 'org.osmdroid:osmdroid-mapsforge:6.1.6'
     implementation 'org.osmdroid:osmdroid-geopackage:6.1.6'
+    implementation 'com.github.MKergall:osmbonuspack:6.6.0'
 }

@@ -9,15 +9,21 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.location.NominatimPOIProvider;
+import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.FolderOverlay;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
@@ -34,7 +40,14 @@ public class GameActivity extends AppCompatActivity {
 
     private MapView mapView = null;
     private Location currentLocation = null;
-    private Landmark[] landmarks = {};
+    private ArrayList<Landmark> landmarks = new ArrayList<Landmark>();
+
+    // Note: mPOIs and landmarks store exactly the same candidate landmarks.  POI stores more info than our custom landmark class.
+    // Need to decide which one to go with.
+    private ArrayList<POI> mPOIs = new ArrayList<POI>();
+
+    // TODO: Fetch poiTypes from Profile/Settings
+    private String[] poiTypes = {"restaurant", "bank", "hotel"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +65,7 @@ public class GameActivity extends AppCompatActivity {
         requestPermissions();
 
         initMap();
-        initLandmarks();
+        //initLandmarks();
     }
 
     @Override
@@ -81,7 +94,10 @@ public class GameActivity extends AppCompatActivity {
             public void onLocationChanged(Location location, IMyLocationProvider source) {
                 myLocationOverlay.onLocationChanged(location, source);
                 if (currentLocation == null) {
-                    mapController.setCenter(new GeoPoint(location.getLatitude(), location.getLongitude()));
+                    GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+                    mapController.setCenter(startPoint);
+                    // maxDistance: max dist to the position, measured in degrees: (0.008 * km)
+                    getPOIsAsync(startPoint, poiTypes, 5, 0.008 * 5);
                 }
                 currentLocation = location;
             }
@@ -90,12 +106,12 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void initLandmarks() {
-        if (this.landmarks.length != 0) return;
+        if (this.landmarks.size() != 0) return;
         // Initialize Landmarks
-        // TODO: Fetch data from somewhere
-        this.landmarks = new Landmark[]{
-                new Landmark("Davis Center", new GeoPoint(43.472482, -80.542116))
-        };
+        if (this.currentLocation != null) {
+            getPOIsAsync(new GeoPoint(this.currentLocation), this.poiTypes, 5, 0.008 * 5);
+        }
+
         // Add marker to map
         if (this.mapView != null) {
             List<Overlay> mapOverlays = this.mapView.getOverlays();
@@ -121,5 +137,58 @@ public class GameActivity extends AppCompatActivity {
         if (!permissionsToRequest.isEmpty())
             ActivityCompat.requestPermissions(this,
                     permissionsToRequest.toArray(new String[0]), 1);
+    }
+
+    private class fetchPOIs extends AsyncTask<Object, Void, ArrayList<POI>> {
+        protected ArrayList<POI> doInBackground(Object... params) {
+            GeoPoint startPoint = (GeoPoint) params[0];
+            String[] poiTypes = (String[]) params[1];
+            Integer maxResultsPerCategory = (Integer) params[2];
+            Double maxDistance = (Double) params[3];
+            NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
+            //GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("maprace"); // get wikipedia entries
+            ArrayList<POI> pois = new ArrayList<POI>();
+            for (String poiType : poiTypes) {
+                ArrayList<POI> pois_of_type = poiProvider.getPOICloseTo(startPoint, poiType, maxResultsPerCategory, maxDistance);
+                pois.addAll(pois_of_type);
+            }
+            return pois;
+        }
+
+        protected void onPostExecute(ArrayList<POI> pois) {
+            if (pois == null) {
+                System.out.printf("Problems occurred when fetching POIs - Empty array");
+            } else {
+                // TODO: Shuffle POIs according to preference ranking ?
+                for (POI poi : pois) {
+                    Landmark landmark = new Landmark(poi.mCategory, poi.mLocation);
+                    landmarks.add(landmark);
+                }
+                mPOIs = pois;
+                updateUIWithPOI(pois);
+            }
+        }
+    }
+
+    // get a list of nearby POIs
+    private void getPOIsAsync(GeoPoint startPoint, String[] poiTypes, Integer maxResultsPerCategory, Double maxDistance) {
+        new fetchPOIs().execute(startPoint, poiTypes, maxResultsPerCategory, maxDistance);
+    }
+
+    // display current POIs on the screen for testing purpose
+    private void updateUIWithPOI(ArrayList<POI> pois) {
+        if (pois != null) {
+            FolderOverlay poiMarkers = new FolderOverlay(this);
+            mapView.getOverlays().add(poiMarkers);
+            Drawable poiIcon = getDrawable(R.drawable.marker);
+            for (POI poi:pois) {
+                Marker poiMarker = new Marker(mapView);
+                poiMarker.setTitle(poi.mType);
+                poiMarker.setSnippet(poi.mDescription);
+                poiMarker.setPosition(poi.mLocation);
+                poiMarker.setIcon(poiIcon);
+                poiMarkers.add(poiMarker);
+            }
+        }
     }
 }
