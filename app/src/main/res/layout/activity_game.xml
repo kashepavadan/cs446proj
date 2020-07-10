@@ -1,59 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/coordinator_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".GameActivity">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".GameActivity">
 
-        <Button
-            android:id="@+id/exit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="exit"
-            android:layout_marginRight="100dp"
-            android:onClick="stopChronometer"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/timer"
-            android:src="@drawable/timer"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
-            android:layout_toRightOf="@+id/exit"/>
+            <Button
+                android:id="@+id/exit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="exit"
+                android:layout_marginRight="100dp"
+                android:onClick="stopChronometer"/>
 
-        <Chronometer
-            android:id="@+id/chronometer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/timer"
-            android:paddingTop="10dp"
-            android:textSize="25sp"/>
+            <ImageView
+                android:id="@+id/timer"
+                android:src="@drawable/timer"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:layout_toRightOf="@+id/exit"/>
 
-        <ImageView
-            android:id="@+id/flag"
-            android:src="@drawable/flag"
-            android:paddingLeft="10dp"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
-            android:layout_toRightOf="@+id/chronometer"/>
+            <Chronometer
+                android:id="@+id/chronometer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/timer"
+                android:paddingTop="10dp"
+                android:textSize="25sp"/>
 
-        <TextView
-            android:id="@+id/goal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:textSize="25sp"
-            android:layout_toRightOf="@+id/flag"/>
+            <ImageView
+                android:id="@+id/flag"
+                android:src="@drawable/flag"
+                android:paddingLeft="10dp"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:layout_toRightOf="@+id/chronometer"/>
 
-        <org.osmdroid.views.MapView android:id="@+id/map"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/exit"/>
+            <TextView
+                android:id="@+id/goal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:textSize="25sp"
+                android:layout_toRightOf="@+id/flag"/>
 
-    </RelativeLayout>
+            <org.osmdroid.views.MapView android:id="@+id/map"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/exit"/>
 
-</LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

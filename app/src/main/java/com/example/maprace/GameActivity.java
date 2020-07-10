@@ -21,6 +21,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.location.NominatimPOIProvider;
 import org.osmdroid.bonuspack.location.POI;
@@ -50,6 +52,8 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
     private Chronometer chronometer;
     private TextView goal;
     private boolean running;
+    private int landmarksRemaining;
+    private float[] distance = new float[1];
 
     // Note: mPOIs and landmarks store exactly the same candidate landmarks.  POI stores more info than our custom landmark class.
     // Need to decide which one to go with.
@@ -112,6 +116,21 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
                     getPOIsAsync(startPoint, poiTypes, 5, 0.008 * 5);
                 }
                 currentLocation = location;
+
+                for(POI landmark: mPOIs){
+                    Location.distanceBetween(currentLocation.getLatitude(),
+                            currentLocation.getLongitude(),
+                            landmark.mLocation.getLatitude(),
+                            landmark.mLocation.getLongitude(),
+                            distance);
+
+                    if(distance[0] <= 100){
+                        landmarksRemaining -= 1;
+                        goal.setText(Integer.toString(landmarksRemaining));
+                        Snackbar.make(findViewById(R.id.coordinator_layout), "location reached", 5).show();
+                        getPOIsAsync(landmark.mLocation, poiTypes, 5, 0.008 * 5);
+                    }
+                }
             }
         });
         mapController.setZoom(18L);
@@ -228,6 +247,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String goalNum) {
         // User touched the dialog's positive button
+        landmarksRemaining = Integer.parseInt(goalNum);
         goal.setText(goalNum);
         startChronometer();
     }
