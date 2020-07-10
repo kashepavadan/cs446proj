@@ -128,7 +128,11 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
                         landmarksRemaining -= 1;
                         goal.setText(Integer.toString(landmarksRemaining));
                         Snackbar.make(findViewById(R.id.coordinator_layout), "location reached", 5).show();
-                        getPOIsAsync(landmark.mLocation, poiTypes, 5, 0.008 * 5);
+                        if(landmarksRemaining != 0){
+                            getPOIsAsync(landmark.mLocation, poiTypes, 5, 0.008 * 5);
+                        }else{
+                            stopChronometer(goal);
+                        }
                     }
                 }
             }
