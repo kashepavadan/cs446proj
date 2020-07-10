@@ -2,10 +2,6 @@
 
 package com.example.maprace;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -13,7 +9,17 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.Chronometer;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.location.NominatimPOIProvider;
@@ -34,13 +40,16 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements LandmarkGoalDialog.LandmarkGoalDialogListener {
 
     private static final String[] requiredPermissions = { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE };
 
     private MapView mapView = null;
     private Location currentLocation = null;
     private ArrayList<Landmark> landmarks = new ArrayList<Landmark>();
+    private Chronometer chronometer;
+    private TextView goal;
+    private boolean running;
 
     // Note: mPOIs and landmarks store exactly the same candidate landmarks.  POI stores more info than our custom landmark class.
     // Need to decide which one to go with.
@@ -58,6 +67,8 @@ public class GameActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_game);
 
+        chronometer = findViewById(R.id.chronometer);
+        goal = (TextView) findViewById(R.id.goal);
         mapView = findViewById(R.id.map);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setMultiTouchControls(true);
@@ -65,7 +76,9 @@ public class GameActivity extends AppCompatActivity {
         requestPermissions();
 
         initMap();
-        //initLandmarks();
+        initLandmarks();
+        openLandmarkGoalDialog();
+        //startChronometer();
     }
 
     @Override
@@ -190,5 +203,31 @@ public class GameActivity extends AppCompatActivity {
                 poiMarkers.add(poiMarker);
             }
         }
+    }
+
+    public void startChronometer(){
+        if(!running){
+            chronometer.setBase(SystemClock.elapsedRealtime());
+            chronometer.start();
+            running = true;
+        }
+    }
+
+    public void stopChronometer(View v){
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        running = false;
+        finish();
+    }
+
+    public void openLandmarkGoalDialog(){
+        DialogFragment dialog = new LandmarkGoalDialog();
+        dialog.show(getSupportFragmentManager(), "landmark goal dialog");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, String goalNum) {
+        // User touched the dialog's positive button
+        goal.setText(goalNum);
+        startChronometer();
     }
 }
