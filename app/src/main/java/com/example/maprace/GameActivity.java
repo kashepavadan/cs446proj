@@ -76,7 +76,6 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         requestPermissions();
 
         initMap();
-        initLandmarks();
         openLandmarkGoalDialog();
         //startChronometer();
     }
@@ -118,6 +117,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         mapController.setZoom(18L);
     }
 
+    // unused method. initMap would init landmarks automatically. Left here for later updates if needed
     private void initLandmarks() {
         if (this.landmarks.size() != 0) return;
         // Initialize Landmarks
@@ -169,8 +169,9 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         }
 
         protected void onPostExecute(ArrayList<POI> pois) {
-            if (pois == null) {
+            if (pois == null || pois.isEmpty()) {
                 System.out.printf("Problems occurred when fetching POIs - Empty array");
+                // TODO: What to do if no nearby locations exists ?
             } else {
                 // TODO: Shuffle POIs according to preference ranking ?
                 for (POI poi : pois) {
@@ -190,7 +191,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
 
     // display current POIs on the screen for testing purpose
     private void updateUIWithPOI(ArrayList<POI> pois) {
-        if (pois != null) {
+        if (pois != null && !pois.isEmpty()) {
             FolderOverlay poiMarkers = new FolderOverlay(this);
             mapView.getOverlays().add(poiMarkers);
             Drawable poiIcon = getDrawable(R.drawable.marker);
