@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.maprace.models.UserProfile;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -46,6 +47,16 @@ public class StorageUtils {
         }
     }
 
+    private static boolean isFileExist(Context applicationContext, String filename) {
+        File file = new File(applicationContext.getFilesDir(), filename);
+        return file.exists();
+    }
+
+    private static void deleteFile(Context applicationContext, String filename) {
+        File file = new File(applicationContext.getFilesDir(), filename);
+        file.delete();
+    }
+
     public static UserProfile getUserProfile(Context applicationContext) {
         Object object = readObject(applicationContext, profileFilename);
 
@@ -55,5 +66,13 @@ public class StorageUtils {
 
     public static void saveUserProfile(Context applicationContext, UserProfile profile) {
         writeObject(applicationContext,profileFilename, profile);
+    }
+
+    public static void deleteProfile(Context applicationContext) {
+        deleteFile(applicationContext, profileFilename);
+    }
+
+    public static boolean isProfileExist(Context applicationContext) {
+        return isFileExist(applicationContext, profileFilename);
     }
 }
