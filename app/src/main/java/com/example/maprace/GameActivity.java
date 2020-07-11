@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -52,6 +54,8 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
     private Chronometer chronometer;
     private TextView goal;
     private boolean running;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
     private int landmarksRemaining;
     private float[] distance = new float[1];
 
@@ -79,9 +83,58 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
 
         requestPermissions();
 
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                for(POI landmark: mPOIs){
+                    Location.distanceBetween(currentLocation.getLatitude(),
+                            currentLocation.getLongitude(),
+                            landmark.mLocation.getLatitude(),
+                            landmark.mLocation.getLongitude(),
+                            distance);
+
+                    if(distance[0] <= 50){
+                        landmarksRemaining -= 1;
+                        goal.setText(Integer.toString(landmarksRemaining));
+                        Snackbar.make(findViewById(R.id.coordinator_layout), "location reached", 5).show();
+                        if(landmarksRemaining != 0){
+                            getPOIsAsync(landmark.mLocation, poiTypes, 5, 0.008 * 5);
+                        }else{
+                            stopChronometer(goal);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions();
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                1000,
+                10,
+                locationListener);
+
+
         initMap();
         openLandmarkGoalDialog();
-        //startChronometer();
     }
 
     @Override
@@ -117,24 +170,6 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
                 }
                 currentLocation = location;
 
-                for(POI landmark: mPOIs){
-                    Location.distanceBetween(currentLocation.getLatitude(),
-                            currentLocation.getLongitude(),
-                            landmark.mLocation.getLatitude(),
-                            landmark.mLocation.getLongitude(),
-                            distance);
-
-                    if(distance[0] <= 100){
-                        landmarksRemaining -= 1;
-                        goal.setText(Integer.toString(landmarksRemaining));
-                        Snackbar.make(findViewById(R.id.coordinator_layout), "location reached", 5).show();
-                        if(landmarksRemaining != 0){
-                            getPOIsAsync(landmark.mLocation, poiTypes, 5, 0.008 * 5);
-                        }else{
-                            stopChronometer(goal);
-                        }
-                    }
-                }
             }
         });
         mapController.setZoom(18L);
