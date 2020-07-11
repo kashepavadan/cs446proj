@@ -17,7 +17,7 @@ public class LandmarkGoalDialog extends AppCompatDialogFragment {
     private TextView editTextGoalNum;
 
     public interface LandmarkGoalDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog, String goalNum);
+        public void onLandmarkGoalDialogPositiveClick(DialogFragment dialog, String goalNum);
     }
 
     LandmarkGoalDialogListener listener;
@@ -45,7 +45,7 @@ public class LandmarkGoalDialog extends AppCompatDialogFragment {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             String goalNum = editTextGoalNum.getText().toString();
-                            listener.onDialogPositiveClick(LandmarkGoalDialog.this, goalNum);
+                            listener.onLandmarkGoalDialogPositiveClick(LandmarkGoalDialog.this, goalNum);
                         }
                     });
 
