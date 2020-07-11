@@ -49,15 +49,19 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
     private static final String[] requiredPermissions = { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE };
 
     private MapView mapView = null;
+    private Location[] route = new Location[1];
+    private Location startLocation = null;
     private Location currentLocation = null;
     private ArrayList<Landmark> landmarks = new ArrayList<Landmark>();
     private Chronometer chronometer;
     private TextView goal;
+    private TextView distance;
     private boolean running;
     private LocationManager locationManager;
     private LocationListener locationListener;
     private int landmarksRemaining;
-    private float[] distance = new float[1];
+    private float totalDistance;
+    private float[] distanceFromLandmark = new float[1];
 
     // Note: mPOIs and landmarks store exactly the same candidate landmarks.  POI stores more info than our custom landmark class.
     // Need to decide which one to go with.
@@ -77,6 +81,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
 
         chronometer = findViewById(R.id.chronometer);
         goal = (TextView) findViewById(R.id.goal);
+        distance = (TextView) findViewById(R.id.distance);
         mapView = findViewById(R.id.map);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setMultiTouchControls(true);
@@ -92,16 +97,24 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
                             currentLocation.getLongitude(),
                             landmark.mLocation.getLatitude(),
                             landmark.mLocation.getLongitude(),
-                            distance);
+                            distanceFromLandmark);
 
-                    if(distance[0] <= 50){
-                        landmarksRemaining -= 1;
+
+                    if(distanceFromLandmark[0] <= 50){
+                        if(landmarksRemaining > 0){
+                            landmarksRemaining -= 1;
+                        }
                         goal.setText(Integer.toString(landmarksRemaining));
-                        Snackbar.make(findViewById(R.id.coordinator_layout), "location reached", 5).show();
+
+                        Snackbar.make(findViewById(R.id.coordinator_layout), "Landmark Reached!", 5000).show();
                         if(landmarksRemaining != 0){
-                            getPOIsAsync(landmark.mLocation, poiTypes, 5, 0.008 * 5);
+                            totalDistance += currentLocation.distanceTo(route[0]);
+                            distance.setText(Float.toString(totalDistance/1000).substring(0,3) + " km");
+                            route[0] = currentLocation;
+                            GeoPoint currentPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
+                            getPOIsAsync(currentPoint, poiTypes, 5, 0.008 * 5);
                         }else{
-                            stopChronometer(goal);
+                            stopChronometer();
                         }
                     }
                 }
@@ -163,12 +176,15 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
             public void onLocationChanged(Location location, IMyLocationProvider source) {
                 myLocationOverlay.onLocationChanged(location, source);
                 if (currentLocation == null) {
+                    route[0] = location;
                     GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
                     mapController.setCenter(startPoint);
                     // maxDistance: max dist to the position, measured in degrees: (0.008 * km)
                     getPOIsAsync(startPoint, poiTypes, 5, 0.008 * 5);
+                    distance.setText("0.0 km");
                 }
                 currentLocation = location;
+
 
             }
         });
@@ -272,6 +288,11 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         }
     }
 
+    public void stopChronometer(){
+        chronometer.stop();
+        running = false;
+    }
+
     public void stopChronometer(View v){
         chronometer.setBase(SystemClock.elapsedRealtime());
         running = false;
@@ -284,7 +305,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, String goalNum) {
+    public void onLandmarkGoalDialogPositiveClick(DialogFragment dialog, String goalNum) {
         // User touched the dialog's positive button
         landmarksRemaining = Integer.parseInt(goalNum);
         goal.setText(goalNum);
