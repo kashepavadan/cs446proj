@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.maprace.models.Preference;
 import com.example.maprace.models.UserProfile;
 import com.example.maprace.utils.StorageUtils;
 
@@ -49,7 +50,9 @@ public class RegistrationActivity extends AppCompatActivity {
         UserProfile profile = new UserProfile();
         profile.setUsername(usernameEditText.getText().toString());
         StorageUtils.saveUserProfile(getApplicationContext(), profile);
-
+        Preference userPref = new Preference();
+        userPref.init();
+        StorageUtils.savePreference(getApplicationContext(), userPref);
         finish();
     }
 }

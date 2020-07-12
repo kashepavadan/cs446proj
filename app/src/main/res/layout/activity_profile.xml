@@ -111,6 +111,7 @@
                         android:textSize="16sp"
                         />
                     <TextView
+                        android:id="@+id/restaurantText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="5"
@@ -152,6 +153,7 @@
                         android:textSize="16sp"
                         />
                     <TextView
+                        android:id="@+id/bankText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="5"
@@ -193,6 +195,7 @@
                             android:textSize="16sp"
                             />
                         <TextView
+                            android:id="@+id/hotelText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="5"
@@ -234,6 +237,7 @@
                         android:textSize="16sp"
                         />
                     <TextView
+                        android:id="@+id/parkText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="5"
@@ -275,6 +279,7 @@
                         android:textSize="16sp"
                         />
                     <TextView
+                        android:id="@+id/mallText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="5"
