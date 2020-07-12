@@ -37,14 +37,9 @@
                     android:textSize="18dp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="self bio" />
                 <Button
                     android:layout_gravity="center_horizontal"
-                    android:id="@+id/textButton"
+                    android:id="@+id/editProfileButton"
                     android:textSize="15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -64,6 +59,7 @@
                         android:src="@drawable/ic_clock"/>
                     <TextView
                         android:textStyle="bold"
+                        android:id="@+id/bestTimeText"
                         android:layout_gravity="center_vertical"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -81,10 +77,11 @@
                         android:src="@drawable/ic_map"/>
                     <TextView
                         android:textStyle="bold"
+                        android:id="@+id/distText"
                         android:layout_gravity="center_vertical"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="20dp"
+                        android:paddingStart="20dp"
                         android:text="Longest Distance"/>
                 </LinearLayout>
             </LinearLayout>
@@ -92,119 +89,99 @@
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="300dp"
-            android:layout_height="210dp"
+            android:layout_width="345dp"
+            android:layout_height="70dp"
             android:layout_gravity="center">
+
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
+                android:layout_width="330dp"
+                android:layout_height="70dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:orientation="horizontal"
-
-                    android:weightSum="3">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Museum"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="10dp"
-                            android:text="999"
-                            android:textSize="25sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Church"
-                            android:textSize="15sp"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="999"
-                            android:textStyle="bold"
-                            android:textSize="25sp"
-                            android:paddingTop="10dp"
-                            />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Park"
-                            android:textSize="15sp"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="999"
-                            android:textStyle="bold"
-                            android:textSize="25sp"
-                            android:paddingTop="10dp"
-                            />
-                    </LinearLayout>
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Restaurant"
+                        android:textSize="16sp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:paddingTop="10dp"
+                        />
                 </LinearLayout>
+                <SeekBar
+                    android:id="@+id/restaurantBar"
+                    android:layout_weight="3"
+                    android:max="10"
+                    android:progress="5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="345dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:layout_width="330dp"
+                android:layout_height="70dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
+                <LinearLayout
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bank"
+                        android:textSize="16sp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:paddingTop="10dp"
+                        />
+                </LinearLayout>
+                <SeekBar
+                    android:id="@+id/bankBar"
+                    android:layout_weight="3"
+                    android:max="10"
+                    android:progress="5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="345dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center">
 
                 <LinearLayout
-                    android:layout_width="300dp"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="330dp"
+                    android:layout_height="70dp"
                     android:orientation="horizontal"
-
-                    android:weightSum="3">
-
+                    android:weightSum="4">
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bus Station"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="10dp"
-                            android:text="999"
-                            android:textSize="25sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:gravity="center"
+                        android:gravity="center_horizontal"
                         android:orientation="vertical"
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -212,40 +189,107 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Statue"
-                            android:textSize="15sp"
+                            android:text="Hotel"
+                            android:textSize="16sp"
                             />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="999"
+                            android:text="5"
                             android:textStyle="bold"
-                            android:textSize="25sp"
+                            android:textSize="15sp"
                             android:paddingTop="10dp"
                             />
                     </LinearLayout>
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
+                    <SeekBar
+                        android:id="@+id/hotelBar"
+                        android:layout_weight="3"
+                        android:max="10"
+                        android:progress="5"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Mall"
-                            android:textSize="15sp"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="999"
-                            android:textStyle="bold"
-                            android:textSize="25sp"
-                            android:paddingTop="10dp"
-                            />
-                    </LinearLayout>
+                        android:layout_height="match_parent"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="345dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:layout_width="330dp"
+                android:layout_height="70dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
+                <LinearLayout
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Park"
+                        android:textSize="16sp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:paddingTop="10dp"
+                        />
                 </LinearLayout>
+                <SeekBar
+                    android:id="@+id/parkBar"
+                    android:layout_weight="3"
+                    android:max="10"
+                    android:progress="5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="345dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:layout_width="330dp"
+                android:layout_height="70dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
+                <LinearLayout
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mall"
+                        android:textSize="16sp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:paddingTop="10dp"
+                        />
+                </LinearLayout>
+                <SeekBar
+                    android:id="@+id/mallBar"
+                    android:layout_weight="3"
+                    android:max="10"
+                    android:progress="5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
