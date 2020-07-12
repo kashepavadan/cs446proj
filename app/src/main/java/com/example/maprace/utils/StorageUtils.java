@@ -3,6 +3,7 @@ package com.example.maprace.utils;
 import android.content.Context;
 
 import com.example.maprace.models.UserProfile;
+import com.example.maprace.models.Preference;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +16,7 @@ import java.io.ObjectOutputStream;
 
 public class StorageUtils {
     private static final String profileFilename = "profile";
+    private static final String preferenceFilename = "preference";
 
     private static Object readObject(Context applicationContext, String filename) {
         Object object = null;
@@ -74,5 +76,16 @@ public class StorageUtils {
 
     public static boolean isProfileExist(Context applicationContext) {
         return isFileExist(applicationContext, profileFilename);
+    }
+
+    public static Preference getPreference(Context applicationContext) {
+        Object object = readObject(applicationContext, preferenceFilename);
+
+        if (object == null) return new Preference();
+        return (Preference) object;
+    }
+
+    public static void savePreference(Context applicationContext, Preference pref) {
+        writeObject(applicationContext,preferenceFilename, pref);
     }
 }
