@@ -39,14 +39,14 @@ public class LandmarkGoalDialog extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.landmark_goal_dialog, null);
-        builder.setView(view)
-                    .setPositiveButton("Done", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            String goalNum = editTextGoalNum.getText().toString();
-                            listener.onLandmarkGoalDialogPositiveClick(LandmarkGoalDialog.this, goalNum);
-                        }
-                    });
+        builder.setView(view);
+        builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String goalNum = editTextGoalNum.getText().toString();
+                listener.onLandmarkGoalDialogPositiveClick(LandmarkGoalDialog.this, goalNum);
+            }
+        });
 
         editTextGoalNum = view.findViewById(R.id.goalNum);
 

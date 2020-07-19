@@ -1,6 +1,8 @@
 package com.example.maprace;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ArrayList<TextView> texts = new ArrayList<>();
     private ArrayList<SeekBar> sliders = new ArrayList<>();
+    private final int defaultWeight = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
         usernameTextView.setText(userProfile.getUsername());
         getElements();
         addSliderListener();
+        addResetListener();
         restoreSetting();
     }
 
@@ -83,4 +87,21 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void addResetListener(){
+        final Button reset = findViewById(R.id.resetProfileButton);
+        reset.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View reset) {
+                Preference pref = StorageUtils.getPreference(getApplicationContext());
+                for (int i = 0; i < sliders.size(); i++){
+                    SeekBar seekbar = sliders.get(i);
+                    final int finalI = i;
+                    pref.setEntryWeight(finalI, defaultWeight);
+                    seekbar.setProgress(defaultWeight);
+                }
+                StorageUtils.savePreference(getApplicationContext(), pref);
+            }
+        });
+    }
 }

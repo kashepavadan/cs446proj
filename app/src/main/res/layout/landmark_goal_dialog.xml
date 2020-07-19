@@ -35,13 +35,14 @@
         android:id="@+id/goalNum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:layout_toRightOf="@+id/landmarkgoal"
         android:layout_below="@+id/header"
-        android:paddingTop="20dp"
         android:layout_marginRight="20dp"
-        android:textSize="20sp"
+        android:layout_toRightOf="@+id/landmarkgoal"
         android:fontFamily="sans-serif-medium"
-        android:textColor="#3D666A"/>
+        android:inputType="number"
+        android:paddingTop="20dp"
+        android:text="3"
+        android:textColor="#3D666A"
+        android:textSize="20sp" />
 
 </RelativeLayout>

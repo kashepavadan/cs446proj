@@ -299,11 +299,11 @@
         </androidx.cardview.widget.CardView>
 
         <Button
-            android:layout_marginTop="40dp"
+            android:id="@+id/resetProfileButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Reset"
-            />
+            android:layout_marginTop="40dp"
+            android:text="Reset" />
     </LinearLayout>
 </ScrollView>
