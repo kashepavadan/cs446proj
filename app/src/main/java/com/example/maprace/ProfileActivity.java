@@ -13,7 +13,6 @@ import com.example.maprace.models.UserProfile;
 import com.example.maprace.utils.StorageUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
