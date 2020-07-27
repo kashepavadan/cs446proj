@@ -14,6 +14,8 @@ import com.example.maprace.utils.StorageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -21,15 +23,30 @@ public class ProfileActivity extends AppCompatActivity {
     private List<SeekBar> sliders = new ArrayList<>();
     private final int defaultWeight = 5;
 
+    private static String getTimeString(Long milliseconds) {
+        if (milliseconds == null) return "N/A";
+
+        long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds - TimeUnit.HOURS.toMillis(hours));
+
+        return String.format(Locale.getDefault(), "%2d hrs %2d mins", hours, minutes);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
         TextView usernameTextView = findViewById(R.id.usernameTextView);
+        TextView longestDistanceTextView = findViewById(R.id.longestDistance);
+        TextView bestTimeTextView = findViewById(R.id.bestTime);
 
         UserProfile userProfile = StorageUtils.getUserProfile(getApplicationContext());
         usernameTextView.setText(userProfile.getUsername());
+        longestDistanceTextView.setText(userProfile.getLongestDistance() != null ?
+                String.format(Locale.getDefault(), "%.2f km", userProfile.getLongestDistance() / 1000) : "N/A");
+        bestTimeTextView.setText(getTimeString(userProfile.getBestTime()));
+
         getElements();
         addSliderListener();
         addResetListener();

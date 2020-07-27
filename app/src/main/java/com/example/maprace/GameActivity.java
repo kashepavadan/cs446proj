@@ -43,6 +43,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
 
+    private FolderOverlay markersOverlay;
     private GameModel gameModel;
     private MyLocationNewOverlay myLocationOverlay;
     private IMapController mapController;
@@ -50,7 +51,6 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
     private Chronometer chronometer;
     private TextView goal;
     private TextView distance;
-    private boolean running;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
 
         setContentView(R.layout.activity_game);
 
+
         gameModel = new GameModel(this);
 
         chronometer = findViewById(R.id.chronometer);
@@ -69,6 +70,9 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         mapView = findViewById(R.id.map);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setMultiTouchControls(true);
+
+        markersOverlay = new FolderOverlay();
+        mapView.getOverlays().add(markersOverlay);
 
         requestPermissions();
 
@@ -123,35 +127,27 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
     // display current POIs on the screen
     public void updateUIWithPOI(List<POI> pois) {
         if (pois != null && !pois.isEmpty()) {
-            FolderOverlay poiMarkers = new FolderOverlay();
+            markersOverlay.getItems().clear();
 
-//            Drawable poiIcon = getDrawable(R.drawable.marker);
-
-            for (POI poi:pois) {
+            for (POI poi : pois) {
                 Marker poiMarker = new Marker(mapView);
                 poiMarker.setTitle(poi.mType);
                 poiMarker.setSnippet(poi.mDescription);
                 poiMarker.setPosition(poi.mLocation);
+                poiMarker.setVisible(!gameModel.isPOIVisited(poi));
 
                 // issue of using custom icon: https://github.com/osmdroid/osmdroid/issues/1349
 //                poiMarker.setIcon(poiIcon);
-
-                poiMarkers.add(poiMarker);
+                markersOverlay.add(poiMarker);
             }
-            mapView.getOverlays().add(poiMarkers);
         }
     }
 
     public void updatePOIVisited() {
         updateGoal(gameModel.getGoal());
+        updateUIWithPOI(gameModel.getmPOIs());
 
         Snackbar.make(findViewById(R.id.coordinator_layout), "Landmark Reached!", 5000).show();
-
-        // goal reached
-        if (gameModel.getNumberOfVisitedPOIs() == gameModel.getGoal()) {
-            // TODO: end game and show dialog
-            stopChronometer();
-        }
     }
 
     public void updateGoal(int goalNum) {
@@ -161,6 +157,12 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
 
     public void updateDistanceWalked(float distanceWalked) {
         distance.setText(String.format(Locale.getDefault(), "%.2f km", distanceWalked / 1000));
+    }
+
+    public void onGameEnded() {
+        stopChronometer();
+        GameEndDialog gameEndDialog = new GameEndDialog(this);
+        gameEndDialog.show(getSupportFragmentManager(), "Game end dialog");
     }
 
     ///////////////////////////////////////////////////////////////
@@ -180,23 +182,24 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
                     permissionsToRequest.toArray(new String[0]), 1);
     }
 
-
     public void startChronometer(){
-        if (!running) {
-            chronometer.setBase(SystemClock.elapsedRealtime());
-            chronometer.start();
-            running = true;
-        }
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                gameModel.setElapsedTime(SystemClock.elapsedRealtime() - chronometer.getBase());
+            }
+        });
+
+        chronometer.start();
     }
 
     public void stopChronometer(){
         chronometer.stop();
-        running = false;
     }
 
-    public void stopChronometer(View v){
-        chronometer.setBase(SystemClock.elapsedRealtime());
-        running = false;
+    public void onExitGame(View v){
+        stopChronometer();
         finish();
     }
 

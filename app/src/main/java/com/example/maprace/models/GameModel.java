@@ -4,6 +4,7 @@ import android.location.Location;
 
 import com.example.maprace.GameActivity;
 import com.example.maprace.services.POIService;
+import com.example.maprace.utils.StorageUtils;
 
 import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.util.GeoPoint;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 public class GameModel implements IMyLocationConsumer {
-    private static final int DISTANCE_THRESHOLD = 50;
+    private static final int DISTANCE_THRESHOLD = 150;
     // TODO: Fetch poiTypes from Profile/Settings
     private static String[] poiTypes = {"restaurant", "bank", "hotel"};
 
@@ -27,6 +28,7 @@ public class GameModel implements IMyLocationConsumer {
     private Location previousLocation;
     private Location currentLocation;
     private float distanceWalked;
+    private long elapsedTime;
     private int goal;
     private boolean finished;
 
@@ -72,6 +74,14 @@ public class GameModel implements IMyLocationConsumer {
     public void setDistanceWalked(float distanceWalked) {
         this.distanceWalked = distanceWalked;
         gameActivity.updateDistanceWalked(distanceWalked);
+    }
+
+    public long getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public void setElapsedTime(long elapsedTime) {
+        this.elapsedTime = elapsedTime;
     }
 
     public List<POI> getmPOIs() {
@@ -147,12 +157,40 @@ public class GameModel implements IMyLocationConsumer {
 
             if(!isPOIVisited(poi) && distanceFromLandmark[0] <= DISTANCE_THRESHOLD) {
                 markPOIVisited(poi);
+
+                boolean goalReached = getGoal() - getNumberOfVisitedPOIs() == 0;
+                if (goalReached) {
+                    endGame();
+                    updateScore();
+                    gameActivity.onGameEnded();
+                }
             }
         }
     }
 
+    public void updateScore() {
+        UserProfile userProfile = StorageUtils.getUserProfile(gameActivity.getApplicationContext());
+        boolean shouldSave = false;
+
+        if (userProfile.getLongestDistance() == null || userProfile.getLongestDistance() < getDistanceWalked()) {
+            userProfile.setLongestDistance(getDistanceWalked());
+            shouldSave = true;
+        }
+
+        if (userProfile.getBestTime() == null || userProfile.getBestTime() > getElapsedTime()) {
+            userProfile.setBestTime(getElapsedTime());
+            shouldSave = true;
+        }
+
+        if (shouldSave) StorageUtils.saveUserProfile(gameActivity.getApplicationContext(), userProfile);
+    }
+
+    public void endGame() {
+        finished = true;
+    }
+
     public void onDestroy() {
         locationProvider.destroy();
-        finished = true;
+        endGame();
     }
 }
