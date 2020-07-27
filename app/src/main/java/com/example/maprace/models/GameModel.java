@@ -28,6 +28,7 @@ public class GameModel implements IMyLocationConsumer {
     private Location currentLocation;
     private float distanceWalked;
     private int goal;
+    private boolean finished;
 
     // Note: mPOIs and landmarks store exactly the same candidate landmarks.  POI stores more info than our custom landmark class.
     // Need to decide which one to go with.
@@ -79,7 +80,7 @@ public class GameModel implements IMyLocationConsumer {
 
     synchronized public void setmPOIs(List<POI> mPOIs) {
         this.mPOIs = mPOIs;
-        gameActivity.updateUIWithPOI(mPOIs);
+        if (!finished) gameActivity.updateUIWithPOI(mPOIs);
     }
 
     public void markPOIVisited(POI poi) {
@@ -150,7 +151,8 @@ public class GameModel implements IMyLocationConsumer {
         }
     }
 
-    public void destory() {
+    public void onDestroy() {
         locationProvider.destroy();
+        finished = true;
     }
 }
