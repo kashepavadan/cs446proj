@@ -13,11 +13,12 @@ import com.example.maprace.models.UserProfile;
 import com.example.maprace.utils.StorageUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private ArrayList<TextView> texts = new ArrayList<>();
-    private ArrayList<SeekBar> sliders = new ArrayList<>();
+    private List<TextView> texts = new ArrayList<>();
+    private List<SeekBar> sliders = new ArrayList<>();
     private final int defaultWeight = 5;
 
     @Override
@@ -45,6 +46,11 @@ public class ProfileActivity extends AppCompatActivity {
                 texts.get(i).setText(Integer.toString(w));
             }
         }
+    }
+
+    public void deleteProfile(View view) {
+        StorageUtils.deleteProfile(getApplicationContext());
+        finish();
     }
 
     private void getElements(){

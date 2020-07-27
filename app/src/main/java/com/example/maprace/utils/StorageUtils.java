@@ -72,6 +72,7 @@ public class StorageUtils {
 
     public static void deleteProfile(Context applicationContext) {
         deleteFile(applicationContext, profileFilename);
+        deleteFile(applicationContext, preferenceFilename);
     }
 
     public static boolean isProfileExist(Context applicationContext) {

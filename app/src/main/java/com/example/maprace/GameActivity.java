@@ -93,7 +93,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        gameModel.destory();
+        gameModel.onDestroy();
     }
 
     private void initMap() {
