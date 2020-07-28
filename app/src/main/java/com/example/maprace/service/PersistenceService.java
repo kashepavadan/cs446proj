@@ -1,9 +1,9 @@
-package com.example.maprace.services;
+package com.example.maprace.service;
 
 import android.content.Context;
 
-import com.example.maprace.dtos.UserProfile;
-import com.example.maprace.dtos.Preference;
+import com.example.maprace.data.model.UserProfile;
+import com.example.maprace.data.model.Preference;
 
 import java.io.File;
 import java.io.FileInputStream;

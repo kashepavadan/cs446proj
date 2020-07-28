@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.maprace.services.PersistenceService;
+import com.example.maprace.service.PersistenceService;
 
 public class MainActivity extends AppCompatActivity {
     private PersistenceService persistenceService;
