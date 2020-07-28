@@ -1,7 +1,6 @@
 package com.example.maprace.models;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Preference implements Serializable {
     private ArrayList<String> category;

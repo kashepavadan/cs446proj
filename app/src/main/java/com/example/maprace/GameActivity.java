@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Chronometer;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,8 +62,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
 
         setContentView(R.layout.activity_game);
 
-
-        gameModel = new GameModel(this);
+        gameModel = new GameModel(this, GameModel.GameMode.WALK);
 
         chronometer = findViewById(R.id.chronometer);
         goal = (TextView) findViewById(R.id.goal);
@@ -70,6 +70,8 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         mapView = findViewById(R.id.map);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setMultiTouchControls(true);
+        ImageView gameModeIcon = findViewById(R.id.gameModeIcon);
+        gameModeIcon.setImageResource(getGameModeIcon(gameModel.getGameMode()));
 
         markersOverlay = new FolderOverlay();
         mapView.getOverlays().add(markersOverlay);
@@ -166,6 +168,21 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
     }
 
     ///////////////////////////////////////////////////////////////
+
+    private int getGameModeIcon(GameModel.GameMode mode) {
+        switch (mode) {
+            case BIKE:
+                return R.drawable.bike;
+
+            case CAR:
+                return R.drawable.car;
+
+            default:
+                break;
+        }
+
+        return R.drawable.walk;
+    }
 
     private void requestPermissions() {
         List<String> permissionsToRequest = new ArrayList<>();

@@ -18,6 +18,22 @@ import java.util.List;
 import java.util.Set;
 
 public class GameModel implements IMyLocationConsumer {
+    public enum GameMode {
+        WALK("WALK"),
+        BIKE("BIKE"),
+        CAR("CAR");
+
+        private final String value;
+
+        GameMode(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
     private static final int DISTANCE_THRESHOLD = 150;
     // TODO: Fetch poiTypes from Profile/Settings
     private static String[] poiTypes = {"restaurant", "bank", "hotel"};
@@ -29,6 +45,7 @@ public class GameModel implements IMyLocationConsumer {
     private Location currentLocation;
     private float distanceWalked;
     private long elapsedTime;
+    private final GameMode gameMode;
     private int goal;
     private boolean finished;
 
@@ -37,10 +54,11 @@ public class GameModel implements IMyLocationConsumer {
     private List<POI> mPOIs;
     private final Set<GeoPoint> visitedPOIs;
 
-    public GameModel(GameActivity gameActivity) {
+    public GameModel(GameActivity gameActivity, GameMode gameMode) {
         this.gameActivity = gameActivity;
-        locationProvider = new GpsMyLocationProvider(gameActivity);
+        this.gameMode = gameMode;
 
+        locationProvider = new GpsMyLocationProvider(gameActivity);
         locationProvider.startLocationProvider(this);
 
         // TODO: persist visitedPOIs
@@ -50,6 +68,10 @@ public class GameModel implements IMyLocationConsumer {
 
     public void startGame() {
         fetchLandmarks();
+    }
+
+    public GameMode getGameMode() {
+        return gameMode;
     }
 
     public Location getCurrentLocation() {
