@@ -9,11 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.maprace.models.Preference;
-import com.example.maprace.models.UserProfile;
-import com.example.maprace.utils.StorageUtils;
+import com.example.maprace.dtos.Preference;
+import com.example.maprace.dtos.UserProfile;
+import com.example.maprace.services.PersistenceService;
 
 public class RegistrationActivity extends AppCompatActivity {
+    private PersistenceService persistenceService;
     private EditText usernameEditText;
     private Button submitButton;
 
@@ -21,6 +22,8 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        persistenceService = PersistenceService.getInstance();
 
         submitButton = findViewById(R.id.submitButton);
         usernameEditText = findViewById(R.id.usernameEditText);
@@ -49,10 +52,10 @@ public class RegistrationActivity extends AppCompatActivity {
     public void handleSubmit(View view) {
         UserProfile profile = new UserProfile();
         profile.setUsername(usernameEditText.getText().toString());
-        StorageUtils.saveUserProfile(getApplicationContext(), profile);
-        Preference userPref = new Preference();
-        userPref.init();
-        StorageUtils.savePreference(getApplicationContext(), userPref);
+        persistenceService.saveUserProfile(profile);
+        Preference userPref = Preference.getDefaultPreference();
+
+        persistenceService.savePreference(userPref);
         finish();
     }
 }

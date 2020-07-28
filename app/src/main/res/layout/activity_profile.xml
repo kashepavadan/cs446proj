@@ -64,7 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="20dp"
-                        android:text="Best time:"/>
+                        android:text="@string/best_time"/>
 
                     <TextView
                         android:id="@+id/bestTime"
@@ -73,7 +73,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="20dp"
-                        android:text="N/A"/>
+                        android:text="@string/n_a"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_marginTop="25dp"
@@ -99,223 +99,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="20dp"
-                        android:text="N/A"/>
-
-
+                        android:text="@string/n_a"/>
                 </LinearLayout>
             </LinearLayout>
 
         </RelativeLayout>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="345dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center">
-
-            <LinearLayout
-                android:layout_width="330dp"
-                android:layout_height="70dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
-                <LinearLayout
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Restaurant"
-                        android:textSize="16sp"
-                        />
-                    <TextView
-                        android:id="@+id/restaurantText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="5"
-                        android:textStyle="bold"
-                        android:textSize="15sp"
-                        android:paddingTop="10dp"
-                        />
-                </LinearLayout>
-                <SeekBar
-                    android:id="@+id/restaurantBar"
-                    android:layout_weight="3"
-                    android:max="10"
-                    android:progress="5"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="345dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center">
-
-            <LinearLayout
-                android:layout_width="330dp"
-                android:layout_height="70dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
-                <LinearLayout
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Bank"
-                        android:textSize="16sp"
-                        />
-                    <TextView
-                        android:id="@+id/bankText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="5"
-                        android:textStyle="bold"
-                        android:textSize="15sp"
-                        android:paddingTop="10dp"
-                        />
-                </LinearLayout>
-                <SeekBar
-                    android:id="@+id/bankBar"
-                    android:layout_weight="3"
-                    android:max="10"
-                    android:progress="5"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="345dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center">
-
-                <LinearLayout
-                    android:layout_width="330dp"
-                    android:layout_height="70dp"
-                    android:orientation="horizontal"
-                    android:weightSum="4">
-                    <LinearLayout
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Hotel"
-                            android:textSize="16sp"
-                            />
-                        <TextView
-                            android:id="@+id/hotelText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="5"
-                            android:textStyle="bold"
-                            android:textSize="15sp"
-                            android:paddingTop="10dp"
-                            />
-                    </LinearLayout>
-                    <SeekBar
-                        android:id="@+id/hotelBar"
-                        android:layout_weight="3"
-                        android:max="10"
-                        android:progress="5"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="345dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center">
-
-            <LinearLayout
-                android:layout_width="330dp"
-                android:layout_height="70dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
-                <LinearLayout
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Park"
-                        android:textSize="16sp"
-                        />
-                    <TextView
-                        android:id="@+id/parkText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="5"
-                        android:textStyle="bold"
-                        android:textSize="15sp"
-                        android:paddingTop="10dp"
-                        />
-                </LinearLayout>
-                <SeekBar
-                    android:id="@+id/parkBar"
-                    android:layout_weight="3"
-                    android:max="10"
-                    android:progress="5"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="345dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center">
-
-            <LinearLayout
-                android:layout_width="330dp"
-                android:layout_height="70dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
-                <LinearLayout
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Mall"
-                        android:textSize="16sp"
-                        />
-                    <TextView
-                        android:id="@+id/mallText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="5"
-                        android:textStyle="bold"
-                        android:textSize="15sp"
-                        android:paddingTop="10dp"
-                        />
-                </LinearLayout>
-                <SeekBar
-                    android:id="@+id/mallBar"
-                    android:layout_weight="3"
-                    android:max="10"
-                    android:progress="5"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:id="@+id/preferencesContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
 
         <Button
             android:id="@+id/resetProfileButton"
@@ -323,14 +117,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
-            android:text="Reset" />
+            android:text="@string/reset"
+            android:onClick="onResetProfile"/>
         <Button
             android:id="@+id/deleteProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:text="Delete Profile"
-            android:onClick="deleteProfile"/>
+            android:text="@string/delete_profile"
+            android:onClick="onDeleteProfile"/>
     </LinearLayout>
 </ScrollView>

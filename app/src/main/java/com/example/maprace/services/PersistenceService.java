@@ -1,9 +1,9 @@
-package com.example.maprace.utils;
+package com.example.maprace.services;
 
 import android.content.Context;
 
-import com.example.maprace.models.UserProfile;
-import com.example.maprace.models.Preference;
+import com.example.maprace.dtos.UserProfile;
+import com.example.maprace.dtos.Preference;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,9 +14,25 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 
-public class StorageUtils {
+public class PersistenceService {
     private static final String profileFilename = "profile";
     private static final String preferenceFilename = "preference";
+
+    private static PersistenceService instance;
+
+    private final Context applicationContext;
+
+    public PersistenceService(Context applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
+    public static void init(Context applicationContext) {
+        instance = new PersistenceService(applicationContext);
+    }
+
+    public static PersistenceService getInstance() {
+        return instance;
+    }
 
     private static Object readObject(Context applicationContext, String filename) {
         Object object = null;
@@ -59,34 +75,38 @@ public class StorageUtils {
         file.delete();
     }
 
-    public static UserProfile getUserProfile(Context applicationContext) {
+    public UserProfile getUserProfile() {
         Object object = readObject(applicationContext, profileFilename);
 
         if (object == null) return new UserProfile();
         return (UserProfile) object;
     }
 
-    public static void saveUserProfile(Context applicationContext, UserProfile profile) {
+    public void saveUserProfile(UserProfile profile) {
         writeObject(applicationContext,profileFilename, profile);
     }
 
-    public static void deleteProfile(Context applicationContext) {
+    public void deleteProfile() {
         deleteFile(applicationContext, profileFilename);
         deleteFile(applicationContext, preferenceFilename);
     }
 
-    public static boolean isProfileExist(Context applicationContext) {
+    public boolean isProfileExist() {
         return isFileExist(applicationContext, profileFilename);
     }
 
-    public static Preference getPreference(Context applicationContext) {
+    public Preference getPreference() {
         Object object = readObject(applicationContext, preferenceFilename);
 
         if (object == null) return new Preference();
         return (Preference) object;
     }
 
-    public static void savePreference(Context applicationContext, Preference pref) {
+    public void savePreference(Preference pref) {
         writeObject(applicationContext,preferenceFilename, pref);
+    }
+
+    public void deletePreference() {
+        deleteFile(applicationContext, preferenceFilename);
     }
 }

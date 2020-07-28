@@ -3,8 +3,9 @@ package com.example.maprace.models;
 import android.location.Location;
 
 import com.example.maprace.GameActivity;
+import com.example.maprace.dtos.UserProfile;
 import com.example.maprace.services.POIService;
-import com.example.maprace.utils.StorageUtils;
+import com.example.maprace.services.PersistenceService;
 
 import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.util.GeoPoint;
@@ -36,10 +37,12 @@ public class GameModel implements IMyLocationConsumer {
 
     private static final int DISTANCE_THRESHOLD = 150;
     // TODO: Fetch poiTypes from Profile/Settings
-    private static String[] poiTypes = {"restaurant", "bank", "hotel"};
+    public static final String[] poiTypes = {"restaurant", "bank", "hotel"};
 
     private final GameActivity gameActivity;
     private final GpsMyLocationProvider locationProvider;
+
+    private final PersistenceService persistenceService;
 
     private Location previousLocation;
     private Location currentLocation;
@@ -57,6 +60,7 @@ public class GameModel implements IMyLocationConsumer {
     public GameModel(GameActivity gameActivity, GameMode gameMode) {
         this.gameActivity = gameActivity;
         this.gameMode = gameMode;
+        persistenceService = PersistenceService.getInstance();
 
         locationProvider = new GpsMyLocationProvider(gameActivity);
         locationProvider.startLocationProvider(this);
@@ -191,7 +195,7 @@ public class GameModel implements IMyLocationConsumer {
     }
 
     public void updateScore() {
-        UserProfile userProfile = StorageUtils.getUserProfile(gameActivity.getApplicationContext());
+        UserProfile userProfile = persistenceService.getUserProfile();
         boolean shouldSave = false;
 
         if (userProfile.getLongestDistance() == null || userProfile.getLongestDistance() < getDistanceWalked()) {
@@ -204,7 +208,7 @@ public class GameModel implements IMyLocationConsumer {
             shouldSave = true;
         }
 
-        if (shouldSave) StorageUtils.saveUserProfile(gameActivity.getApplicationContext(), userProfile);
+        if (shouldSave) persistenceService.saveUserProfile(userProfile);
     }
 
     public void endGame() {
