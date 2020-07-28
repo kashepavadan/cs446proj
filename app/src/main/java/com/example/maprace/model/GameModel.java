@@ -1,11 +1,11 @@
-package com.example.maprace.models;
+package com.example.maprace.model;
 
 import android.location.Location;
 
 import com.example.maprace.GameActivity;
-import com.example.maprace.dtos.UserProfile;
-import com.example.maprace.services.POIService;
-import com.example.maprace.services.PersistenceService;
+import com.example.maprace.data.model.UserProfile;
+import com.example.maprace.service.POIService;
+import com.example.maprace.service.PersistenceService;
 
 import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.util.GeoPoint;

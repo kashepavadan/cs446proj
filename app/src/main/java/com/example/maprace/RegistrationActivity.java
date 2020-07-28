@@ -9,9 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.maprace.dtos.Preference;
-import com.example.maprace.dtos.UserProfile;
-import com.example.maprace.services.PersistenceService;
+import com.example.maprace.data.model.Preference;
+import com.example.maprace.data.model.UserProfile;
+import com.example.maprace.service.PersistenceService;
 
 public class RegistrationActivity extends AppCompatActivity {
     private PersistenceService persistenceService;

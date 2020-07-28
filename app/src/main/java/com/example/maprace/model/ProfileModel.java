@@ -1,9 +1,9 @@
-package com.example.maprace.models;
+package com.example.maprace.model;
 
 import com.example.maprace.ProfileActivity;
-import com.example.maprace.dtos.Preference;
-import com.example.maprace.dtos.UserProfile;
-import com.example.maprace.services.PersistenceService;
+import com.example.maprace.data.model.Preference;
+import com.example.maprace.data.model.UserProfile;
+import com.example.maprace.service.PersistenceService;
 
 public class ProfileModel {
     private final ProfileActivity profileActivity;

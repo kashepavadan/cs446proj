@@ -7,9 +7,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.maprace.dtos.Preference;
-import com.example.maprace.dtos.UserProfile;
-import com.example.maprace.models.ProfileModel;
+import com.example.maprace.data.model.Preference;
+import com.example.maprace.data.model.UserProfile;
+import com.example.maprace.model.ProfileModel;
 
 import java.util.List;
 import java.util.Locale;

@@ -19,7 +19,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.maprace.models.GameModel;
+import com.example.maprace.model.GameModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.osmdroid.api.IMapController;

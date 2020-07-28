@@ -1,4 +1,4 @@
-package com.example.maprace.dtos;
+package com.example.maprace.data.model;
 
 import java.io.Serializable;
 

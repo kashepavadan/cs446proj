@@ -1,4 +1,4 @@
-package com.example.maprace.services;
+package com.example.maprace.service;
 
 import android.os.AsyncTask;
 

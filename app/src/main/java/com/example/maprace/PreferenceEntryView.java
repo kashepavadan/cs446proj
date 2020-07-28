@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 
-import com.example.maprace.dtos.Preference;
+import com.example.maprace.data.model.Preference;
 
 public class PreferenceEntryView extends CardView {
     public PreferenceEntryView(ProfileActivity profileActivity, Preference.Entry preferenceEntry) {

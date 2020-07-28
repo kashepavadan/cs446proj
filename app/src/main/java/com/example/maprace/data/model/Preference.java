@@ -1,5 +1,5 @@
-package com.example.maprace.dtos;
-import com.example.maprace.models.GameModel;
+package com.example.maprace.data.model;
+import com.example.maprace.model.GameModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
