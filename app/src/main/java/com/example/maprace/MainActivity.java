@@ -6,14 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.maprace.utils.StorageUtils;
+import com.example.maprace.services.PersistenceService;
 
 public class MainActivity extends AppCompatActivity {
+    private PersistenceService persistenceService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PersistenceService.init(getApplicationContext());
+        persistenceService = PersistenceService.getInstance();
     }
 
     @Override
@@ -21,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         // prompts to create profile when profile does not exist
-        if (!StorageUtils.isProfileExist(getApplicationContext())) {
+        if (!persistenceService.isProfileExist()) {
             Intent intent = new Intent(this, RegistrationActivity.class);
             startActivity(intent);
         }
