@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.maprace.component.ShareButton;
 import com.example.maprace.data.model.GameMode;
 import com.example.maprace.data.model.Preference;
 import com.example.maprace.data.model.Records;
@@ -24,6 +25,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView usernameTextView;
     private TextView longestDistanceTextView;
     private TextView bestTimeTextView;
+    private ShareButton[] shareButtons;
     private RadioGroup gameModeRadioGroup;
     private RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
@@ -69,6 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
         usernameTextView = findViewById(R.id.usernameTextView);
         longestDistanceTextView = findViewById(R.id.longestDistance);
         bestTimeTextView = findViewById(R.id.bestTime);
+        shareButtons = new ShareButton[]{ findViewById(R.id.twitterButton), findViewById(R.id.facebookButton)};
         gameModeRadioGroup = findViewById(R.id.gameModeRadioGroup);
 
         gameModeRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
@@ -107,6 +110,10 @@ public class ProfileActivity extends AppCompatActivity {
         longestDistanceTextView.setText(records.getLongestDistance() != null ?
                 String.format(Locale.getDefault(), "%.2f km", records.getLongestDistance() / 1000) : "N/A");
         bestTimeTextView.setText(getTimeString(records.getBestTime()));
+        for (ShareButton button: shareButtons) {
+            button.setLongestDistance(longestDistanceTextView.getText().toString());
+            button.setBestTime(bestTimeTextView.getText().toString());
+        }
     }
 
     public void onUpdatePreference(Preference preference) {
