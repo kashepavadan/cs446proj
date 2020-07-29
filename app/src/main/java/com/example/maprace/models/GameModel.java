@@ -74,31 +74,31 @@ public class GameModel implements IMyLocationConsumer {
         return gameMode;
     }
 
-    public Location getCurrentLocation() {
+    private Location getCurrentLocation() {
         return currentLocation;
     }
 
-    public void setCurrentLocation(Location location, IMyLocationProvider locationSource) {
+    private void setCurrentLocation(Location location, IMyLocationProvider locationSource) {
         previousLocation  = currentLocation;
         currentLocation = location;
 
         gameActivity.updateCurrentLocation(location, previousLocation, locationSource);
     }
 
-    public Location getPreviousLocation() {
+    private Location getPreviousLocation() {
         return previousLocation;
     }
 
-    public float getDistanceWalked() {
+    private float getDistanceWalked() {
         return distanceWalked;
     }
 
-    public void setDistanceWalked(float distanceWalked) {
+    private void setDistanceWalked(float distanceWalked) {
         this.distanceWalked = distanceWalked;
         gameActivity.updateDistanceWalked(distanceWalked);
     }
 
-    public long getElapsedTime() {
+    private long getElapsedTime() {
         return elapsedTime;
     }
 
@@ -110,12 +110,12 @@ public class GameModel implements IMyLocationConsumer {
         return mPOIs;
     }
 
-    synchronized public void setmPOIs(List<POI> mPOIs) {
+    synchronized private void setmPOIs(List<POI> mPOIs) {
         this.mPOIs = mPOIs;
         if (!finished) gameActivity.updateUIWithPOI(mPOIs);
     }
 
-    public void markPOIVisited(POI poi) {
+    private void markPOIVisited(POI poi) {
         visitedPOIs.add(poi.mLocation);
         gameActivity.updatePOIVisited();
     }
@@ -190,7 +190,7 @@ public class GameModel implements IMyLocationConsumer {
         }
     }
 
-    public void updateScore() {
+    private void updateScore() {
         UserProfile userProfile = StorageUtils.getUserProfile(gameActivity.getApplicationContext());
         boolean shouldSave = false;
 
@@ -207,7 +207,7 @@ public class GameModel implements IMyLocationConsumer {
         if (shouldSave) StorageUtils.saveUserProfile(gameActivity.getApplicationContext(), userProfile);
     }
 
-    public void endGame() {
+    private void endGame() {
         finished = true;
     }
 
