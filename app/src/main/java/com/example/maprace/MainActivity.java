@@ -6,17 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.maprace.service.PersistenceService;
+import com.example.maprace.data.model.GameMode;
+import com.example.maprace.model.MainModel;
 
 public class MainActivity extends AppCompatActivity {
-    private PersistenceService persistenceService;
+    private MainModel mainModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        PersistenceService.init(getApplicationContext());
-        persistenceService = PersistenceService.getInstance();
+
+        mainModel = new MainModel(this);
     }
 
     @Override
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         // prompts to create profile when profile does not exist
-        if (!persistenceService.isProfileExist()) {
+        if (!mainModel.isProfileExist()) {
             Intent intent = new Intent(this, RegistrationActivity.class);
             startActivity(intent);
         }
@@ -45,4 +46,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onUpdateGameMode(GameMode gameMode) {
+
+    }
 }

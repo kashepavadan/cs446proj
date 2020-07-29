@@ -10,122 +10,179 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="422dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="390dp"
-                android:orientation="vertical">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="21dp"
-                    android:src="@drawable/blank_profile" />
-
-                <TextView
-                    android:id="@+id/usernameTextView"
-                    android:layout_marginTop="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="First Lastname"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:layout_gravity="center_horizontal"
-                    android:id="@+id/editProfileButton"
-                    android:textSize="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Edit"
-                    app:icon="@drawable/ic_edit"
-                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                    />
-
-                <LinearLayout
-                    android:layout_marginTop="20dp"
-                    android:paddingLeft="35dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:src="@drawable/ic_clock"/>
-                    <TextView
-                        android:textStyle="bold"
-                        android:id="@+id/bestTimeText"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="20dp"
-                        android:text="@string/best_time"/>
-
-                    <TextView
-                        android:id="@+id/bestTime"
-                        android:textStyle="bold"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:text="@string/n_a"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_marginTop="25dp"
-                    android:paddingLeft="35dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="37dp">
-                    <ImageView
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:src="@drawable/ic_map"/>
-                    <TextView
-                        android:textStyle="bold"
-                        android:id="@+id/distText"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:text="Longest Distance:"/>
-                    <TextView
-                        android:id="@+id/longestDistance"
-                        android:textStyle="bold"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:text="@string/n_a"/>
-                </LinearLayout>
-            </LinearLayout>
-
-        </RelativeLayout>
+        android:orientation="vertical"
+        android:paddingHorizontal="35dp"
+        android:paddingVertical="35dp">
 
         <LinearLayout
-            android:id="@+id/preferencesContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"/>
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/resetProfileButton"
-            android:layout_width="wrap_content"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="21dp"
+                android:src="@drawable/blank_profile" />
+
+            <TextView
+                android:id="@+id/usernameTextView"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/n_a"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/editProfileButton"
+                android:textSize="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit"
+                app:icon="@drawable/ic_edit"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon" />
+
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_clock"
+                    android:contentDescription="@string/best_time" />
+                <TextView
+                    android:textStyle="bold"
+                    android:id="@+id/bestTimeText"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="20dp"
+                    android:text="@string/best_time"/>
+
+                <TextView
+                    android:id="@+id/bestTime"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/n_a"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="37dp">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_map"
+                    android:contentDescription="@string/longest_distance" />
+                <TextView
+                    android:textStyle="bold"
+                    android:id="@+id/distText"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="20dp"
+                    android:text="@string/longest_distance"/>
+                <TextView
+                    android:id="@+id/longestDistance"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/n_a"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="40dp"
+            android:background="@android:color/darker_gray"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp"
-            android:text="@string/reset"
-            android:onClick="onResetProfile"/>
-        <Button
-            android:id="@+id/deleteProfile"
-            android:layout_width="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/game_mode"
+                    android:textSize="20sp"
+                    android:paddingVertical="20dp"/>
+
+                <RadioGroup
+                    android:id="@+id/gameModeRadioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+                    <RadioButton
+                        android:id="@+id/walkModeRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/walk"
+                        android:layout_weight="1"/>
+                    <RadioButton
+                        android:id="@+id/bikeModeRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bike"
+                        android:layout_weight="1"/>
+                    <RadioButton
+                        android:id="@+id/carModeRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/car"
+                        android:layout_weight="1"/>
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="30dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/preferences"
+                    android:textSize="20sp"
+                    android:paddingVertical="20dp"/>
+                <LinearLayout
+                    android:id="@+id/preferencesContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:text="@string/delete_profile"
-            android:onClick="onDeleteProfile"/>
+            android:orientation="vertical"
+            android:layout_marginTop="50dp">
+            <Button
+                android:id="@+id/resetProfileButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/reset_settings"
+                android:onClick="onResetSettings"/>
+            <Button
+                android:id="@+id/deleteProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_profile"
+                android:onClick="onDeleteProfile"/>
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

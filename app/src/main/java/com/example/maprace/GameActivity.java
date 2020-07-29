@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.maprace.data.model.GameMode;
 import com.example.maprace.model.GameModel;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -62,7 +63,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
 
         setContentView(R.layout.activity_game);
 
-        gameModel = new GameModel(this, GameModel.GameMode.WALK);
+        gameModel = new GameModel(this);
 
         chronometer = findViewById(R.id.chronometer);
         goal = (TextView) findViewById(R.id.goal);
@@ -169,7 +170,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
 
     ///////////////////////////////////////////////////////////////
 
-    private int getGameModeIcon(GameModel.GameMode mode) {
+    private int getGameModeIcon(GameMode mode) {
         switch (mode) {
             case BIKE:
                 return R.drawable.bike;

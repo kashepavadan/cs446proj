@@ -3,11 +3,15 @@ package com.example.maprace;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.maprace.data.model.GameMode;
 import com.example.maprace.data.model.Preference;
+import com.example.maprace.data.model.Records;
 import com.example.maprace.data.model.UserProfile;
 import com.example.maprace.model.ProfileModel;
 
@@ -20,9 +24,32 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView usernameTextView;
     private TextView longestDistanceTextView;
     private TextView bestTimeTextView;
+    private RadioGroup gameModeRadioGroup;
+    private RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            if (profileModel == null) return;
+
+            GameMode gameMode = GameMode.WALK;
+
+            switch (checkedId) {
+                case R.id.bikeModeRadio:
+                    gameMode = GameMode.BIKE;
+                    break;
+
+                case R.id.carModeRadio:
+                    gameMode = GameMode.CAR;
+                    break;
+
+                default:
+                    break;
+            }
+
+            profileModel.setGameMode(gameMode);
+        }
+    };
 
     private ProfileModel profileModel;
-
 
     private static String getTimeString(Long milliseconds) {
         if (milliseconds == null) return "N/A";
@@ -42,15 +69,44 @@ public class ProfileActivity extends AppCompatActivity {
         usernameTextView = findViewById(R.id.usernameTextView);
         longestDistanceTextView = findViewById(R.id.longestDistance);
         bestTimeTextView = findViewById(R.id.bestTime);
+        gameModeRadioGroup = findViewById(R.id.gameModeRadioGroup);
+
+        gameModeRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
 
         profileModel = new ProfileModel(this);
     }
 
     public void onUpdateProfile(UserProfile userProfile) {
         usernameTextView.setText(userProfile.getUsername());
-        longestDistanceTextView.setText(userProfile.getLongestDistance() != null ?
-                String.format(Locale.getDefault(), "%.2f km", userProfile.getLongestDistance() / 1000) : "N/A");
-        bestTimeTextView.setText(getTimeString(userProfile.getBestTime()));
+
+        GameMode gameMode = userProfile.getGameMode();
+        if (gameMode == null) return;
+
+        int id = R.id.walkModeRadio;;
+
+        switch (gameMode) {
+            case BIKE:
+                id = R.id.bikeModeRadio;
+                break;
+
+            case CAR:
+                id = R.id.carModeRadio;
+                break;
+
+            default:
+                break;
+        }
+
+        RadioButton radioButton = gameModeRadioGroup.findViewById(id);
+        gameModeRadioGroup.setOnCheckedChangeListener(null);
+        radioButton.setChecked(true);
+        gameModeRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
+    }
+
+    public void onUpdateRecords(Records records) {
+        longestDistanceTextView.setText(records.getLongestDistance() != null ?
+                String.format(Locale.getDefault(), "%.2f km", records.getLongestDistance() / 1000) : "N/A");
+        bestTimeTextView.setText(getTimeString(records.getBestTime()));
     }
 
     public void onUpdatePreference(Preference preference) {
@@ -68,8 +124,8 @@ public class ProfileActivity extends AppCompatActivity {
         profileModel.updatePreference(id, value);
     }
 
-    public void onResetProfile(View view) {
-        profileModel.resetProfile();
+    public void onResetSettings(View view) {
+        profileModel.resetSettings();
     }
 
     public void onDeleteProfile(View view) {

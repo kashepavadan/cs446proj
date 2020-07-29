@@ -1,7 +1,9 @@
 package com.example.maprace.model;
 
 import com.example.maprace.ProfileActivity;
+import com.example.maprace.data.model.GameMode;
 import com.example.maprace.data.model.Preference;
+import com.example.maprace.data.model.Records;
 import com.example.maprace.data.model.UserProfile;
 import com.example.maprace.service.PersistenceService;
 
@@ -17,11 +19,8 @@ public class ProfileModel {
         persistenceService = PersistenceService.getInstance();
 
         refreshUserProfile();
+        refreshRecords();
         refreshPreference();
-    }
-
-    public UserProfile getUserProfile() {
-        return userProfile;
     }
 
     public void setUserProfile(UserProfile userProfile) {
@@ -29,8 +28,17 @@ public class ProfileModel {
         refreshUserProfile();
     }
 
+    public void setGameMode(GameMode gameMode) {
+        userProfile.setGameMode(gameMode);
+        setUserProfile(userProfile);
+
+        // records and preference are dependant on game mode
+        refreshRecords();
+        refreshPreference();
+    }
+
     public void deleteUserProfile() {
-        persistenceService.deleteProfile();
+        persistenceService.clearAllData();
     }
 
     private void refreshUserProfile() {
@@ -38,8 +46,14 @@ public class ProfileModel {
         profileActivity.onUpdateProfile(userProfile);
     }
 
-    public Preference getPreference() {
-        return preference;
+    public void setRecords(Records records) {
+        persistenceService.saveRecords(records);
+        refreshRecords();
+    }
+
+    private void refreshRecords() {
+        Records records = persistenceService.getRecords();
+        profileActivity.onUpdateRecords(records);
     }
 
     public void setPreference(Preference preference) {
@@ -57,8 +71,7 @@ public class ProfileModel {
         profileActivity.onUpdatePreference(preference);
     }
 
-    public void resetProfile() {
-        setUserProfile(UserProfile.getDefaultUserProfile(userProfile));
+    public void resetSettings() {
         setPreference(Preference.getDefaultPreference());
     }
 }
