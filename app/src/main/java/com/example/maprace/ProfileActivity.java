@@ -2,6 +2,7 @@ package com.example.maprace;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -70,6 +71,11 @@ public class ProfileActivity extends AppCompatActivity {
         longestDistanceTextView = findViewById(R.id.longestDistance);
         bestTimeTextView = findViewById(R.id.bestTime);
         gameModeRadioGroup = findViewById(R.id.gameModeRadioGroup);
+        Button buttonOpenBottomSheet = findViewById(R.id.shareButton);
+        buttonOpenBottomSheet.setOnClickListener(v -> {
+            shareOptionDialog bottomSheet = new shareOptionDialog();
+            bottomSheet.show(getSupportFragmentManager(), "exampleBottomSheet");
+        });
 
         gameModeRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
 
