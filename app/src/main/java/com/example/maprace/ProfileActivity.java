@@ -16,18 +16,20 @@ import com.example.maprace.data.model.Preference;
 import com.example.maprace.data.model.Records;
 import com.example.maprace.data.model.UserProfile;
 import com.example.maprace.model.ProfileModel;
+import com.example.maprace.service.PersistenceService;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements editProfileDialog.BottomSheetListener {
     private LinearLayout preferencesContainer;
     private TextView usernameTextView;
     private TextView longestDistanceTextView;
     private TextView bestTimeTextView;
     private ShareButton[] shareButtons;
     private RadioGroup gameModeRadioGroup;
+    private PersistenceService persistenceService;
     private RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -74,15 +76,24 @@ public class ProfileActivity extends AppCompatActivity {
         bestTimeTextView = findViewById(R.id.bestTime);
         shareButtons = new ShareButton[]{ findViewById(R.id.twitterButton), findViewById(R.id.facebookButton)};
         gameModeRadioGroup = findViewById(R.id.gameModeRadioGroup);
-        Button buttonOpenBottomSheet = findViewById(R.id.shareButton);
+        persistenceService = PersistenceService.getInstance();
+        Button buttonOpenBottomSheet = findViewById(R.id.editProfileButton);
         buttonOpenBottomSheet.setOnClickListener(v -> {
-            shareOptionDialog bottomSheet = new shareOptionDialog();
-            bottomSheet.show(getSupportFragmentManager(), "exampleBottomSheet");
+            editProfileDialog bottomSheet = new editProfileDialog();
+            bottomSheet.show(getSupportFragmentManager(), "BottomSheet");
         });
 
         gameModeRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
 
         profileModel = new ProfileModel(this);
+    }
+
+
+    @Override
+    public void onFinishEdit(String text) {
+        usernameTextView.setText(text);
+        UserProfile profile = UserProfile.newInstance(text);
+        persistenceService.saveUserProfile(profile);
     }
 
     public void onUpdateProfile(UserProfile userProfile) {
