@@ -10,12 +10,11 @@ import android.view.View;
 import android.widget.NumberPicker;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.maprace.R;
 
-public class LandmarkGoalDialog extends AppCompatDialogFragment {
+public class LandmarkGoalDialog extends MapRaceDialog {
     private NumberPicker goalPicker;
 
     public interface LandmarkGoalDialogListener {
@@ -23,6 +22,11 @@ public class LandmarkGoalDialog extends AppCompatDialogFragment {
     }
 
     LandmarkGoalDialogListener listener;
+
+    public LandmarkGoalDialog() {
+        super();
+        setMessage("Select the number of landmarks you aim to visit:");
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -40,24 +44,23 @@ public class LandmarkGoalDialog extends AppCompatDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = getAlertDialogBuilder();
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.landmark_goal_dialog, null);
         goalPicker = view.findViewById(R.id.goalPicker);
 
-        builder.setTitle("Map Race");
-        builder.setMessage("Select the number of landmarks you aim to visit:");
         goalPicker.setMinValue(1);
         goalPicker.setMaxValue(10);
 
-        builder.setView(view);
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                listener.onLandmarkGoalDialogPositiveClick(LandmarkGoalDialog.this, goalPicker.getValue());
-            }
-        });
-
-        return builder.create();
+        return builder.setTitle(getTitle())
+                .setMessage(getMessage())
+                .setView(view)
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        listener.onLandmarkGoalDialogPositiveClick(LandmarkGoalDialog.this, goalPicker.getValue());
+                    }
+                })
+                .create();
     }
 }

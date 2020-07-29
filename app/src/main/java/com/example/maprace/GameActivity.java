@@ -4,6 +4,7 @@ package com.example.maprace;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -19,7 +20,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.maprace.component.GameEndDialog;
+import com.example.maprace.component.ConfirmationDialog;
+import com.example.maprace.component.NotificationDialog;
 import com.example.maprace.component.LandmarkGoalDialog;
 import com.example.maprace.data.model.GameMode;
 import com.example.maprace.model.GameModel;
@@ -68,8 +70,8 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         gameModel = new GameModel(this);
 
         chronometer = findViewById(R.id.chronometer);
-        goal = (TextView) findViewById(R.id.goal);
-        distance = (TextView) findViewById(R.id.distance);
+        goal = findViewById(R.id.goal);
+        distance = findViewById(R.id.distance);
         mapView = findViewById(R.id.map);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setMultiTouchControls(true);
@@ -166,8 +168,16 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
 
     public void onGameEnded() {
         stopChronometer();
-        GameEndDialog gameEndDialog = new GameEndDialog(this);
-        gameEndDialog.show(getSupportFragmentManager(), "Game end dialog");
+        NotificationDialog gameEndDialog = new NotificationDialog();
+        gameEndDialog.setTitle("Map Race");
+        gameEndDialog.setMessage("Congratulations, you've reached the goal!");
+        gameEndDialog.setOnClickListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        gameEndDialog.show(getSupportFragmentManager(), "gameEndDialog");
     }
 
     ///////////////////////////////////////////////////////////////
@@ -218,9 +228,19 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         chronometer.stop();
     }
 
-    public void onExitGame(View v){
-        stopChronometer();
-        finish();
+    public void onExitGame(View v) {
+        ConfirmationDialog confirmationDialog = new ConfirmationDialog();
+
+        confirmationDialog.setMessage("Are you sure you want to exit the game?");
+        confirmationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                stopChronometer();
+                finish();
+            }
+        });
+
+        confirmationDialog.show(getSupportFragmentManager(), "exitGameConfirmationDialog");
     }
 
     public void openLandmarkGoalDialog(){

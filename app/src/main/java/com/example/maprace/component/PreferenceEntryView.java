@@ -1,10 +1,12 @@
-package com.example.maprace;
+package com.example.maprace.component;
 
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 
+import com.example.maprace.ProfileActivity;
+import com.example.maprace.R;
 import com.example.maprace.data.model.Preference;
 
 public class PreferenceEntryView extends CardView {
