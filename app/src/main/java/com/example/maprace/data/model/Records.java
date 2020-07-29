@@ -1,18 +1,13 @@
-package com.example.maprace.models;
+package com.example.maprace.data.model;
 
 import java.io.Serializable;
 
-public class UserProfile implements Serializable {
-    private String username;
+public class Records implements Serializable {
     private Float longestDistance = null;
     private Long bestTime = null;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public static Records getDefaultRecords() {
+        return new Records();
     }
 
     public Float getLongestDistance() {

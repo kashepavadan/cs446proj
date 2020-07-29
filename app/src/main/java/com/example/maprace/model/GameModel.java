@@ -1,10 +1,12 @@
-package com.example.maprace.models;
+package com.example.maprace.model;
 
 import android.location.Location;
 
 import com.example.maprace.GameActivity;
-import com.example.maprace.services.POIService;
-import com.example.maprace.utils.StorageUtils;
+import com.example.maprace.data.model.GameMode;
+import com.example.maprace.data.model.Records;
+import com.example.maprace.service.POIService;
+import com.example.maprace.service.PersistenceService;
 
 import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.util.GeoPoint;
@@ -18,34 +20,20 @@ import java.util.List;
 import java.util.Set;
 
 public class GameModel implements IMyLocationConsumer {
-    public enum GameMode {
-        WALK("WALK"),
-        BIKE("BIKE"),
-        CAR("CAR");
-
-        private final String value;
-
-        GameMode(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-    }
-
     private static final int DISTANCE_THRESHOLD = 150;
     // TODO: Fetch poiTypes from Profile/Settings
-    private static String[] poiTypes = {"restaurant", "bank", "hotel"};
+    public static final String[] poiTypes = {"restaurant", "bank", "hotel"};
 
     private final GameActivity gameActivity;
     private final GpsMyLocationProvider locationProvider;
 
+    private final PersistenceService persistenceService;
+
+    private final GameMode gameMode;
     private Location previousLocation;
     private Location currentLocation;
     private float distanceWalked;
     private long elapsedTime;
-    private final GameMode gameMode;
     private int goal;
     private boolean finished;
 
@@ -54,9 +42,10 @@ public class GameModel implements IMyLocationConsumer {
     private List<POI> mPOIs;
     private final Set<GeoPoint> visitedPOIs;
 
-    public GameModel(GameActivity gameActivity, GameMode gameMode) {
+    public GameModel(GameActivity gameActivity) {
         this.gameActivity = gameActivity;
-        this.gameMode = gameMode;
+        persistenceService = PersistenceService.getInstance();
+        gameMode = persistenceService.getGameMode();
 
         locationProvider = new GpsMyLocationProvider(gameActivity);
         locationProvider.startLocationProvider(this);
@@ -191,20 +180,20 @@ public class GameModel implements IMyLocationConsumer {
     }
 
     private void updateScore() {
-        UserProfile userProfile = StorageUtils.getUserProfile(gameActivity.getApplicationContext());
+        Records records = persistenceService.getRecords();
         boolean shouldSave = false;
 
-        if (userProfile.getLongestDistance() == null || userProfile.getLongestDistance() < getDistanceWalked()) {
-            userProfile.setLongestDistance(getDistanceWalked());
+        if (records.getLongestDistance() == null || records.getLongestDistance() < getDistanceWalked()) {
+            records.setLongestDistance(getDistanceWalked());
             shouldSave = true;
         }
 
-        if (userProfile.getBestTime() == null || userProfile.getBestTime() > getElapsedTime()) {
-            userProfile.setBestTime(getElapsedTime());
+        if (records.getBestTime() == null || records.getBestTime() > getElapsedTime()) {
+            records.setBestTime(getElapsedTime());
             shouldSave = true;
         }
 
-        if (shouldSave) StorageUtils.saveUserProfile(gameActivity.getApplicationContext(), userProfile);
+        if (shouldSave) persistenceService.saveRecords(records);
     }
 
     private void endGame() {
