@@ -4,14 +4,19 @@ import java.io.Serializable;
 
 public class UserProfile implements Serializable {
     private String username;
-    private Float longestDistance = null;
-    private Long bestTime = null;
+    private GameMode gameMode;
 
-    public static UserProfile getDefaultUserProfile(UserProfile profile) {
+    public static UserProfile newInstance(String username) {
         UserProfile newProfile = new UserProfile();
-        newProfile.setUsername(profile.getUsername());
+
+        newProfile.setUsername(username);
+        newProfile.setGameMode(GameMode.WALK);
 
         return newProfile;
+    }
+
+    public static UserProfile getDefaultUserProfile(UserProfile profile) {
+        return newInstance(profile.getUsername());
     }
 
     public String getUsername() {
@@ -22,19 +27,11 @@ public class UserProfile implements Serializable {
         this.username = username;
     }
 
-    public Float getLongestDistance() {
-        return longestDistance;
+    public GameMode getGameMode() {
+        return gameMode;
     }
 
-    public void setLongestDistance(Float longestDistance) {
-        this.longestDistance = longestDistance;
-    }
-
-    public Long getBestTime() {
-        return bestTime;
-    }
-
-    public void setBestTime(Long bestTime) {
-        this.bestTime = bestTime;
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
     }
 }

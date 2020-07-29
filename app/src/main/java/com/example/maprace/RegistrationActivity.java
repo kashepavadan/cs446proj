@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.maprace.data.model.Preference;
+import com.example.maprace.data.model.Records;
 import com.example.maprace.data.model.UserProfile;
 import com.example.maprace.service.PersistenceService;
 
@@ -50,12 +51,15 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void handleSubmit(View view) {
-        UserProfile profile = new UserProfile();
-        profile.setUsername(usernameEditText.getText().toString());
+        UserProfile profile = UserProfile.newInstance(usernameEditText.getText().toString());
         persistenceService.saveUserProfile(profile);
-        Preference userPref = Preference.getDefaultPreference();
 
+        Preference userPref = Preference.getDefaultPreference();
         persistenceService.savePreference(userPref);
+
+        Records records = Records.getDefaultRecords();
+        persistenceService.saveRecords(records);
+
         finish();
     }
 }
