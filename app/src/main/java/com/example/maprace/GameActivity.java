@@ -19,6 +19,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.maprace.component.GameEndDialog;
+import com.example.maprace.component.LandmarkGoalDialog;
 import com.example.maprace.data.model.GameMode;
 import com.example.maprace.model.GameModel;
 import com.google.android.material.snackbar.Snackbar;
@@ -227,9 +229,9 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
     }
 
     @Override
-    public void onLandmarkGoalDialogPositiveClick(DialogFragment dialog, String goalNum) {
+    public void onLandmarkGoalDialogPositiveClick(DialogFragment dialog, int goal) {
         // User touched the dialog's positive button
-        gameModel.setGoal(Integer.parseInt(goalNum));
+        gameModel.setGoal(goal);
         startGame();
     }
 }
