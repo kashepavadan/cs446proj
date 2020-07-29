@@ -47,8 +47,7 @@ public class editProfileDialog extends BottomSheetDialogFragment {
         try {
             listener = (BottomSheetListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement BottomSheetListener");
+            throw new ClassCastException(context.toString());
         }
     }
 }
