@@ -1,5 +1,6 @@
 package com.example.maprace;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.maprace.component.ConfirmationDialog;
+import com.example.maprace.component.PreferenceEntryView;
 import com.example.maprace.component.ShareButton;
 import com.example.maprace.data.model.GameMode;
 import com.example.maprace.data.model.Preference;
@@ -149,11 +152,29 @@ public class ProfileActivity extends AppCompatActivity implements editProfileDia
     }
 
     public void onResetSettings(View view) {
-        profileModel.resetSettings();
+        ConfirmationDialog confirmationDialog = new ConfirmationDialog();
+
+        confirmationDialog.setMessage("Are you sure you want to reset the settings?");
+        confirmationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                profileModel.resetSettings();
+            }
+        });
+        confirmationDialog.show(getSupportFragmentManager(), "resetSettingsConfirmationDialog");
     }
 
     public void onDeleteProfile(View view) {
-        profileModel.deleteUserProfile();
-        finish();
+        ConfirmationDialog confirmationDialog = new ConfirmationDialog();
+
+        confirmationDialog.setMessage("Are you sure you want to delete your profile?");
+        confirmationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                profileModel.deleteUserProfile();
+                finish();
+            }
+        });
+        confirmationDialog.show(getSupportFragmentManager(), "deleteProfileConfirmationDialog");
     }
 }

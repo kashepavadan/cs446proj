@@ -1,44 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/container_padding"
+    android:paddingVertical="@dimen/container_padding"
     tools:context=".RegistrationActivity">
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="340dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="@string/get_started_by_creating_a_user_profile"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="@dimen/text_size_caption"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:text="@string/get_started_by_creating_a_user_profile"/>
 
     <EditText
         android:id="@+id/usernameEditText"
-        android:layout_width="340dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="44dp"
-        android:ems="10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_large"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        android:hint="@string/username" />
+        android:hint="@string/username"
+        android:autofillHints="Username" />
 
     <Button
         android:id="@+id/submitButton"
-        android:layout_width="340dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="@dimen/margin_medium"
         android:text="@string/create"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameEditText"
         android:onClick="handleSubmit" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
