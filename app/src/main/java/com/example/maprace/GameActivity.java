@@ -200,7 +200,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
                     permissionsToRequest.toArray(new String[0]), 1);
     }
 
-    public void startChronometer(){
+    private void startChronometer(){
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -212,7 +212,7 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         chronometer.start();
     }
 
-    public void stopChronometer(){
+    private void stopChronometer(){
         chronometer.stop();
     }
 
