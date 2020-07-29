@@ -1,4 +1,4 @@
-package com.example.maprace;
+package com.example.maprace.component;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.maprace.GameActivity;
 
 
 public class GameEndDialog extends DialogFragment {

@@ -1,4 +1,4 @@
-package com.example.maprace;
+package com.example.maprace.component;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,16 +7,19 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.NumberPicker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.maprace.R;
+
 public class LandmarkGoalDialog extends AppCompatDialogFragment {
-    private TextView editTextGoalNum;
+    private NumberPicker goalPicker;
 
     public interface LandmarkGoalDialogListener {
-        public void onLandmarkGoalDialogPositiveClick(DialogFragment dialog, String goalNum);
+        void onLandmarkGoalDialogPositiveClick(DialogFragment dialog, int goal);
     }
 
     LandmarkGoalDialogListener listener;
@@ -34,21 +37,26 @@ public class LandmarkGoalDialog extends AppCompatDialogFragment {
         }
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.landmark_goal_dialog, null);
+        goalPicker = view.findViewById(R.id.goalPicker);
+
+        builder.setTitle("Map Race");
+        builder.setMessage("Select the number of landmarks you aim to visit:");
+        goalPicker.setMinValue(1);
+        goalPicker.setMaxValue(10);
+
         builder.setView(view);
-        builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                String goalNum = editTextGoalNum.getText().toString();
-                listener.onLandmarkGoalDialogPositiveClick(LandmarkGoalDialog.this, goalNum);
+            public void onClick(DialogInterface dialog, int which) {
+                listener.onLandmarkGoalDialogPositiveClick(LandmarkGoalDialog.this, goalPicker.getValue());
             }
         });
-
-        editTextGoalNum = view.findViewById(R.id.goalNum);
 
         return builder.create();
     }
