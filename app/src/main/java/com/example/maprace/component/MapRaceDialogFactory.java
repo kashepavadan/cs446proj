@@ -18,12 +18,35 @@ public class MapRaceDialogFactory {
         }
         if(type.equals(NOTIFICATION_DIALOG)){
             return new NotificationDialog();
-        } else if(type.equals(LANDMARK_GOAL_DIALOG)){
-            return new LandmarkGoalDialog();
         } else if(type.equals(CONFIRMATION_DIALOG)){
             return new ConfirmationDialog();
-        } else if(type.equals(TEXT_INPUT_DIALOG)){
-            return new TextInputDialog();
+        }
+
+        return null;
+    }
+
+    public MapRaceDialog getDialog(String type, int maxValue){
+        if(type == null || maxValue < 1){
+            return null;
+        }
+        if(type.equals(LANDMARK_GOAL_DIALOG)){
+            LandmarkGoalDialog lmd = new LandmarkGoalDialog();
+            lmd.setMaxValue(maxValue);
+            return lmd;
+        }
+
+        return null;
+    }
+
+    public MapRaceDialog getDialog(String type, String defaultValue, String inputHint){
+        if(type == null || defaultValue == null || inputHint == null){
+            return null;
+        }
+        if(type.equals(TEXT_INPUT_DIALOG)){
+            TextInputDialog tid = new TextInputDialog();
+            tid.setDefaultValue(defaultValue);
+            tid.setInputHint(inputHint);
+            return tid;
         }
 
         return null;

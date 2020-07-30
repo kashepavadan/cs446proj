@@ -264,9 +264,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void openLandmarkGoalDialog(){
-        MapRaceDialog dialog = dialogFactory.getDialog(LANDMARK_GOAL_DIALOG);
+        MapRaceDialog dialog = dialogFactory.getDialog(LANDMARK_GOAL_DIALOG, gameModel.getmPOIs().size());
 
-        dialog.setSetting(gameModel.getmPOIs().size());
         dialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
             @Override
             public void onConfirm(Object goal) {

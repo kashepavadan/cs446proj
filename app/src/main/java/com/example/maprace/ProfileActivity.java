@@ -176,11 +176,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onEditUsername(View view) {
-        MapRaceDialog textInputDialog = dialogFactory.getDialog(TEXT_INPUT_DIALOG);
+        MapRaceDialog textInputDialog = dialogFactory.getDialog(TEXT_INPUT_DIALOG, profileModel.getUsername(), "Username");
 
         textInputDialog.setMessage("Please enter a new username:");
-        textInputDialog.setDefaultValue(profileModel.getUsername());
-        textInputDialog.setSetting("Username");
         textInputDialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
             @Override
             public void onConfirm(Object text) {

@@ -13,18 +13,22 @@ import androidx.annotation.NonNull;
 import com.example.maprace.R;
 
 public class LandmarkGoalDialog extends MapRaceDialog {
+    private int maxValue;
     private int minValue = 1;
 
     public LandmarkGoalDialog() {
         super();
         setMessage("Select the number of landmarks you aim to visit:");
         setPositiveButtonText("Confirm");
-        setSetting(new Integer(10));
+        setMaxValue(10);
     }
 
-    @Override
-    public void setSetting(Object setting) {
-        this.setting = ((Integer) setting).intValue();
+    public int getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(int maxValue) {
+        this.maxValue = maxValue;
 
     }
 
@@ -37,7 +41,7 @@ public class LandmarkGoalDialog extends MapRaceDialog {
         NumberPicker goalPicker = view.findViewById(R.id.goalPicker);
 
         goalPicker.setMinValue(minValue);
-        goalPicker.setMaxValue(((Integer) getSetting()).intValue());
+        goalPicker.setMaxValue(getMaxValue());
 
         return builder.setTitle(getTitle())
                 .setMessage(getMessage())

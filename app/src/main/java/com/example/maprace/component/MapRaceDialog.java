@@ -14,8 +14,6 @@ public class MapRaceDialog extends DialogFragment {
     protected String negativeButtonText;
     protected DialogInterface.OnClickListener onNegativeClickListener;
     protected LandmarkGoalDialog.OnConfirmListener onConfirmListener;
-    protected Object setting;
-    protected Object defaultValue;
 
     public interface OnConfirmListener {
         void onConfirm(Object obj);
@@ -80,22 +78,6 @@ public class MapRaceDialog extends DialogFragment {
 
     public void setOnNegativeClickListener(DialogInterface.OnClickListener onNegativeClickListener) {
         this.onNegativeClickListener = onNegativeClickListener;
-    }
-
-    public Object getSetting() {
-        return setting;
-    }
-
-    public void setSetting(Object setting) {
-        this.setting = setting;
-    }
-
-    public Object getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(Object defaultValue) {
-        this.defaultValue = defaultValue;
     }
 
     protected AlertDialog.Builder getAlertDialogBuilder() {

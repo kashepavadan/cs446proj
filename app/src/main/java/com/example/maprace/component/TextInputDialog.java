@@ -13,19 +13,24 @@ import androidx.annotation.Nullable;
 import com.example.maprace.R;
 
 public class TextInputDialog extends MapRaceDialog {
+    private String defaultValue;
+    private String inputHint;
+
     public TextInputDialog() {
         super();
         setPositiveButtonText("Ok");
     }
 
-    @Override
-    public void setDefaultValue(Object defaultValue) {
+    public String getDefaultValue() { return defaultValue; }
+
+    public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
     }
 
-    @Override
-    public void setSetting(Object setting) {
-        this.setting = (String) setting;
+    public String getInputHint() { return inputHint; }
+
+    public void setInputHint(String inputHint) {
+        this.inputHint = inputHint;
     }
 
     @NonNull
@@ -35,8 +40,8 @@ public class TextInputDialog extends MapRaceDialog {
         View view = inflater.inflate(R.layout.dialog_text_input, null);
         EditText usernameEditText = view.findViewById(R.id.inputTextEdit);
 
-        usernameEditText.setText((String) getDefaultValue());
-        usernameEditText.setHint((String) getSetting());
+        usernameEditText.setText(getDefaultValue());
+        usernameEditText.setHint(getInputHint());
 
         setContentView(view);
 
