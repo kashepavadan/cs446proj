@@ -33,7 +33,7 @@ public class POIService extends AsyncTask<Object, Void, List<POI>>  {
         List<POI> pois = new ArrayList<>();
         for (String poiType : poiTypes) {
             List<POI> pois_of_type = poiProvider.getPOICloseTo(startPoint, poiType, maxResultsPerCategory, maxDistance);
-            pois.addAll(pois_of_type);
+            if (pois_of_type != null) pois.addAll(pois_of_type);
         }
         return pois;
     }
