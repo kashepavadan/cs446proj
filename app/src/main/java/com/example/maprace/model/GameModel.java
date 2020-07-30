@@ -27,22 +27,25 @@ import java.util.Set;
 
 public class GameModel implements IMyLocationConsumer {
     public enum Status {UNINITIALIZED, LOADING, READY, STARTED, ENDED}
+    public static final String[] poiTypes = {"restaurant", "bank", "hotel"};
 
     private static final int MAX_DISTANCE = 5;
     private static final int MAX_RESULTS_PER_CATEGORY = 10;
     private static final int DISTANCE_THRESHOLD = 150;
-    // TODO: Fetch poiTypes from Profile/Settings
-    public static final String[] poiTypes = {"restaurant", "bank", "hotel"};
 
-    private Status status;
+    public static final float CAR_SPEED_LIMIT = 80f;
+    public static final float BIKE_SPEED_LIMIT = 35f;
+    public static final float WALK_SPEED_LIMIT = 20f;
 
     private final GameActivity gameActivity;
     private final GpsMyLocationProvider locationProvider;
     private final PersistenceService persistenceService;
 
+    private Status status;
     private final GameMode gameMode;
     private Location previousLocation;
     private Location currentLocation;
+    private float currentSpeed;
     private float distanceWalked;
     private long elapsedTime;
     private int goal;
@@ -122,6 +125,14 @@ public class GameModel implements IMyLocationConsumer {
         return previousLocation;
     }
 
+    public float getCurrentSpeed() {
+        return currentSpeed;
+    }
+
+    public void setCurrentSpeed(float currentSpeed) {
+        this.currentSpeed = currentSpeed;
+    }
+
     private float getDistanceWalked() {
         return distanceWalked;
     }
@@ -170,6 +181,21 @@ public class GameModel implements IMyLocationConsumer {
         gameActivity.updateGoal(goal);
     }
 
+    public float getSpeedLimit() {
+        switch (getGameMode()) {
+            case BIKE:
+                return BIKE_SPEED_LIMIT;
+
+            case CAR:
+                return CAR_SPEED_LIMIT;
+
+            default:
+                break;
+        }
+
+        return WALK_SPEED_LIMIT;
+    }
+
     private void fetchLandmarks(Consumer<List<POI>> consumer) {
         Location location = getCurrentLocation();
         if (location == null) return;
@@ -186,6 +212,9 @@ public class GameModel implements IMyLocationConsumer {
 
         setCurrentLocation(location, source);
 
+        if (location.hasSpeed()) setCurrentSpeed(location.getSpeed());
+        else setCurrentSpeed(0f);
+
         switch (getStatus()) {
             case UNINITIALIZED:
                 initGame();
@@ -199,12 +228,19 @@ public class GameModel implements IMyLocationConsumer {
                 }
                 setDistanceWalked(distanceWalked);
 
+                detectSpeeding();
                 detectLandmarkReached();
             }
 
             default:
                 break;
         }
+    }
+
+    private void detectSpeeding() {
+        if (getCurrentSpeed() <= getSpeedLimit()) return;
+        endGame();
+        gameActivity.onSpeeding();
     }
 
     private void detectLandmarkReached() {
@@ -244,12 +280,11 @@ public class GameModel implements IMyLocationConsumer {
         setGoal(goal);
     }
 
-    private void endGame() {
+    public void endGame() {
         setStatus(Status.ENDED);
     }
 
     public void onDestroy() {
         locationProvider.destroy();
-        endGame();
     }
 }

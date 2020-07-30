@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class GameActivity extends AppCompatActivity {
+    private static final String SPEEDING_MESSAGE_TEMPLATE = "Your speed is %.2f km/h! This exceeds the speed limit of %s mode (%.2f km/h). The game will end now.";
     private static final String[] requiredPermissions = {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -102,7 +103,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopChronometer();
         gameModel.onDestroy();
     }
 
@@ -127,6 +127,11 @@ public class GameActivity extends AppCompatActivity {
     private void startGame(int goal) {
         gameModel.startGame(goal);
         startChronometer();
+    }
+
+    private void endGame() {
+        stopChronometer();
+        gameModel.endGame();
     }
 
     //////// UI UPDATE METHODS TRIGGERED BY GAME MODEL ////////
@@ -255,6 +260,7 @@ public class GameActivity extends AppCompatActivity {
         showExitDialog(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                endGame();
                 finish();
             }
         });
@@ -271,5 +277,22 @@ public class GameActivity extends AppCompatActivity {
             }
         });
         dialog.show(getSupportFragmentManager(), "landmark goal dialog");
+    }
+
+    public void onSpeeding() {
+        GameMode gameMode = gameModel.getGameMode();
+        String message = String.format(Locale.getDefault(), SPEEDING_MESSAGE_TEMPLATE,
+                gameModel.getCurrentSpeed(), gameMode.getValue(), gameModel.getSpeedLimit());
+        NotificationDialog notificationDialog = new NotificationDialog();
+
+        notificationDialog.setMessage(message);
+        notificationDialog.setOnClickListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                endGame();
+                finish();
+            }
+        });
+        notificationDialog.show(getSupportFragmentManager(), "speedingNotificationDialog");
     }
 }
