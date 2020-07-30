@@ -19,7 +19,7 @@ public abstract class ShareButton extends androidx.appcompat.widget.AppCompatBut
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (url == "") {
+                if ("".equals(url)) {
                     Log.i("Share Button", "URL is empty");
                     return;
                 }

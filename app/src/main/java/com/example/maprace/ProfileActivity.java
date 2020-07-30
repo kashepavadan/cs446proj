@@ -29,9 +29,6 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView bestTimeTextView;
     private ShareButton[] shareButtons;
     private RadioGroup gameModeRadioGroup;
-    private static final String CONFIRMATION_DIALOG="CONFIRMATION DIALOG";
-    private static final String TEXT_INPUT_DIALOG="TEXT INPUT DIALOG";
-    private MapRaceDialogFactory dialogFactory = new MapRaceDialogFactory();
 
     private RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
@@ -135,12 +132,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onResetSettings(View view) {
-        MapRaceDialog confirmationDialog = dialogFactory.getDialog(CONFIRMATION_DIALOG);
+        MapRaceDialog confirmationDialog = MapRaceDialogFactory.getConfirmationDialog();
 
         confirmationDialog.setMessage("Are you sure you want to reset the settings?");
-        confirmationDialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
+        confirmationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
             @Override
-            public void onConfirm(Object obj) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 profileModel.resetSettings();
             }
         });
@@ -148,12 +145,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onDeleteProfile(View view) {
-        MapRaceDialog confirmationDialog = dialogFactory.getDialog(CONFIRMATION_DIALOG);
+        MapRaceDialog confirmationDialog = MapRaceDialogFactory.getConfirmationDialog();
 
         confirmationDialog.setMessage("Are you sure you want to delete your profile?");
-        confirmationDialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
+        confirmationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
             @Override
-            public void onConfirm(Object obj) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 profileModel.deleteUserProfile();
                 finish();
             }
@@ -162,13 +159,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onClearRecords(View view) {
-        MapRaceDialog confirmationDialog = dialogFactory.getDialog(CONFIRMATION_DIALOG);
+        MapRaceDialog confirmationDialog = MapRaceDialogFactory.getConfirmationDialog();
         String gameMode = profileModel.getGameMode().getValue();
 
         confirmationDialog.setMessage(String.format("Are you sure you want to clear the records for %s mode?", gameMode));
-        confirmationDialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
+        confirmationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
             @Override
-            public void onConfirm(Object obj) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 profileModel.clearRecords();
             }
         });
@@ -176,7 +173,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onEditUsername(View view) {
-        MapRaceDialog textInputDialog = dialogFactory.getDialog(TEXT_INPUT_DIALOG, profileModel.getUsername(), "Username");
+        MapRaceDialog textInputDialog = MapRaceDialogFactory.getTextInputDialog(profileModel.getUsername(), "Username");
 
         textInputDialog.setMessage("Please enter a new username:");
         textInputDialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {

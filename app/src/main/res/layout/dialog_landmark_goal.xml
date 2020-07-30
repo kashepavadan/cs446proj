@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="?dialogPreferredPadding"
-    tools:context=".component.LandmarkGoalDialog">
+    tools:context=".component.NumberPickerDialog">
 
     <NumberPicker
         android:id="@+id/goalPicker"

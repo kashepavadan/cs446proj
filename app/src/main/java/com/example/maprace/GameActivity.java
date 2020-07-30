@@ -56,10 +56,6 @@ public class GameActivity extends AppCompatActivity {
     private TextView goal;
     private TextView distance;
 
-    private static final String CONFIRMATION_DIALOG="CONFIRMATION DIALOG";
-    private static final String NOTIFICATION_DIALOG="NOTIFICATION DIALOG";
-    private static final String LANDMARK_GOAL_DIALOG="LANDMARK GOAL DIALOG";
-    private MapRaceDialogFactory dialogFactory = new MapRaceDialogFactory();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,9 +107,9 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        showExitDialog(new MapRaceDialog.OnConfirmListener() {
+        showExitDialog(new DialogInterface.OnClickListener() {
             @Override
-            public void onConfirm(Object obj) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 GameActivity.super.onBackPressed();
             }
         });
@@ -145,7 +141,7 @@ public class GameActivity extends AppCompatActivity {
 
     public void onPOIsReceived(List<POI> pois) {
         if (pois.isEmpty()) {
-            MapRaceDialog notificationDialog = dialogFactory.getDialog(NOTIFICATION_DIALOG);
+            MapRaceDialog notificationDialog = MapRaceDialogFactory.getNotificationDialog();
             notificationDialog.setMessage("No nearby landmarks were found.");
             notificationDialog.show(getSupportFragmentManager(), "emptyPOIDialog");
             return;
@@ -186,11 +182,12 @@ public class GameActivity extends AppCompatActivity {
 
     public void onGameEnded() {
         stopChronometer();
-        MapRaceDialog gameEndDialog = dialogFactory.getDialog(NOTIFICATION_DIALOG);
+        MapRaceDialog gameEndDialog = MapRaceDialogFactory.getNotificationDialog();
         gameEndDialog.setMessage("Congratulations, you've reached the goal!");
-        gameEndDialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
+        gameEndDialog.setCanceledOnTouchOutside(false);
+        gameEndDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
             @Override
-            public void onConfirm(Object obj) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
             }
         });
@@ -245,18 +242,18 @@ public class GameActivity extends AppCompatActivity {
         chronometer.stop();
     }
 
-    private void showExitDialog(MapRaceDialog.OnConfirmListener onConfirmListener) {
-        MapRaceDialog confirmationDialog = dialogFactory.getDialog(CONFIRMATION_DIALOG);
+    private void showExitDialog(DialogInterface.OnClickListener onPositiveClickListener) {
+        MapRaceDialog confirmationDialog = MapRaceDialogFactory.getConfirmationDialog();
 
         confirmationDialog.setMessage("Are you sure you want to exit the game?");
-        confirmationDialog.setOnConfirmListener(onConfirmListener);
+        confirmationDialog.setOnPositiveClickListener(onPositiveClickListener);
         confirmationDialog.show(getSupportFragmentManager(), "exitGameConfirmationDialog");
     }
 
     public void onExitGame(View v) {
-        showExitDialog(new MapRaceDialog.OnConfirmListener() {
+        showExitDialog(new DialogInterface.OnClickListener() {
             @Override
-            public void onConfirm(Object obj) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 endGame();
                 finish();
             }
@@ -264,12 +261,14 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void openLandmarkGoalDialog(){
-        MapRaceDialog dialog = dialogFactory.getDialog(LANDMARK_GOAL_DIALOG, gameModel.getmPOIs().size());
+        MapRaceDialog dialog = MapRaceDialogFactory.getNumberPickerDialog(1, gameModel.getmPOIs().size());
 
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
             @Override
             public void onConfirm(Object goal) {
-                startGame(((Integer) goal).intValue());
+                startGame((Integer) goal);
             }
         });
         dialog.show(getSupportFragmentManager(), "landmark goal dialog");
@@ -279,12 +278,13 @@ public class GameActivity extends AppCompatActivity {
         GameMode gameMode = gameModel.getGameMode();
         String message = String.format(Locale.getDefault(), SPEEDING_MESSAGE_TEMPLATE,
                 gameModel.getCurrentSpeed(), gameMode.getValue(), gameModel.getSpeedLimit());
-        MapRaceDialog notificationDialog = dialogFactory.getDialog(NOTIFICATION_DIALOG);
+        MapRaceDialog notificationDialog = MapRaceDialogFactory.getNotificationDialog();
 
         notificationDialog.setMessage(message);
-        notificationDialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
+        notificationDialog.setCanceledOnTouchOutside(false);
+        notificationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
             @Override
-            public void onConfirm(Object obj) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 endGame();
                 finish();
             }
