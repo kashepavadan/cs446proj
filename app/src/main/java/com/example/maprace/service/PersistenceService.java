@@ -68,12 +68,9 @@ public class PersistenceService {
     private static Object readObject(Context applicationContext, String filename) {
         Object object = null;
 
-        try {
-            FileInputStream fileInputStream = applicationContext.openFileInput(filename);
+        try (FileInputStream fileInputStream = applicationContext.openFileInput(filename)) {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-
             object = objectInputStream.readObject();
-            fileInputStream.close();
         } catch (FileNotFoundException ignored) {
 
         } catch (IOException | ClassNotFoundException e) {
@@ -84,8 +81,7 @@ public class PersistenceService {
     }
 
     private static void writeObject(Context applicationContext, String filename, Object object) {
-        try {
-            FileOutputStream fileOutputStream = applicationContext.openFileOutput(filename, 0);
+        try (FileOutputStream fileOutputStream = applicationContext.openFileOutput(filename, 0)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(object);
             objectOutputStream.close();

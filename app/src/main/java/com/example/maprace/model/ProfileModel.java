@@ -23,6 +23,10 @@ public class ProfileModel {
         refreshPreference();
     }
 
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
     public void setUserProfile(UserProfile userProfile) {
         persistenceService.saveUserProfile(userProfile);
         refreshUserProfile();
@@ -73,5 +77,10 @@ public class ProfileModel {
 
     public void resetSettings() {
         setPreference(Preference.getDefaultPreference());
+    }
+
+    public void clearRecords() {
+        persistenceService.deleteRecords();
+        refreshRecords();
     }
 }
