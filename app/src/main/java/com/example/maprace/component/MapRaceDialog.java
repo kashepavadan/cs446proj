@@ -26,7 +26,7 @@ public class MapRaceDialog extends DialogFragment {
         setTitle("Map Race");
     }
 
-    public String getTitle() {
+    protected String getTitle() {
         return title;
     }
 
@@ -34,7 +34,7 @@ public class MapRaceDialog extends DialogFragment {
         this.title = title;
     }
 
-    public String getMessage() {
+    protected String getMessage() {
         return message;
     }
 
@@ -42,31 +42,31 @@ public class MapRaceDialog extends DialogFragment {
         this.message = message;
     }
 
-    public View getContentView() {
+    protected View getContentView() {
         return contentView;
     }
 
-    public void setContentView(View contentView) {
+    protected void setContentView(View contentView) {
         this.contentView = contentView;
     }
 
-    public String getPositiveButtonText() {
+    protected String getPositiveButtonText() {
         return positiveButtonText;
     }
 
-    public void setPositiveButtonText(String positiveButtonText) {
+    protected void setPositiveButtonText(String positiveButtonText) {
         this.positiveButtonText = positiveButtonText;
     }
 
-    public String getNegativeButtonText() {
+    protected String getNegativeButtonText() {
         return negativeButtonText;
     }
 
-    public void setNegativeButtonText(String negativeButtonText) {
+    protected void setNegativeButtonText(String negativeButtonText) {
         this.negativeButtonText = negativeButtonText;
     }
 
-    public MapRaceDialog.OnConfirmListener getOnConfirmListener() {
+    protected MapRaceDialog.OnConfirmListener getOnConfirmListener() {
         return onConfirmListener;
     }
 
@@ -74,7 +74,7 @@ public class MapRaceDialog extends DialogFragment {
         this.onConfirmListener = onConfirmListener;
     }
 
-    public DialogInterface.OnClickListener getOnNegativeClickListener() {
+    protected DialogInterface.OnClickListener getOnNegativeClickListener() {
         return onNegativeClickListener;
     }
 
@@ -82,7 +82,7 @@ public class MapRaceDialog extends DialogFragment {
         this.onNegativeClickListener = onNegativeClickListener;
     }
 
-    public Object getSetting() {
+    protected Object getSetting() {
         return setting;
     }
 
@@ -90,7 +90,7 @@ public class MapRaceDialog extends DialogFragment {
         this.setting = setting;
     }
 
-    public Object getDefaultValue() {
+    protected Object getDefaultValue() {
         return defaultValue;
     }
 
