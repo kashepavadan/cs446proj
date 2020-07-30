@@ -260,7 +260,7 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
-    public void openLandmarkGoalDialog(){
+    private void openLandmarkGoalDialog(){
         LandmarkGoalDialog dialog = new LandmarkGoalDialog();
 
         dialog.setMaxValue(gameModel.getmPOIs().size());

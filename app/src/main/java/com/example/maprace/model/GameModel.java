@@ -106,11 +106,11 @@ public class GameModel implements IMyLocationConsumer {
         return currentLocation;
     }
 
-    public Status getStatus() {
+    private Status getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    private void setStatus(Status status) {
         this.status = status;
     }
 
@@ -176,7 +176,7 @@ public class GameModel implements IMyLocationConsumer {
         return goal;
     }
 
-    public void setGoal(int goal) {
+    private void setGoal(int goal) {
         this.goal = goal;
         gameActivity.updateGoal(goal);
     }
