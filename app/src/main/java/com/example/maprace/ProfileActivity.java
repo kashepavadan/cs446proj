@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.maprace.component.ConfirmationDialog;
+import com.example.maprace.component.MapRaceDialog;
+import com.example.maprace.component.MapRaceDialogFactory;
 import com.example.maprace.component.PreferenceEntryView;
 import com.example.maprace.component.ShareButton;
-import com.example.maprace.component.TextInputDialog;
 import com.example.maprace.data.model.GameMode;
 import com.example.maprace.data.model.Preference;
 import com.example.maprace.model.ProfileModel;
@@ -29,6 +29,10 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView bestTimeTextView;
     private ShareButton[] shareButtons;
     private RadioGroup gameModeRadioGroup;
+    private static final String CONFIRMATION_DIALOG="CONFIRMATION DIALOG";
+    private static final String TEXT_INPUT_DIALOG="TEXT INPUT DIALOG";
+    private MapRaceDialogFactory dialogFactory = new MapRaceDialogFactory();
+
     private RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -131,12 +135,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onResetSettings(View view) {
-        ConfirmationDialog confirmationDialog = new ConfirmationDialog();
+        MapRaceDialog confirmationDialog = dialogFactory.getDialog(CONFIRMATION_DIALOG);
 
         confirmationDialog.setMessage("Are you sure you want to reset the settings?");
-        confirmationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
+        confirmationDialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onConfirm(Object obj) {
                 profileModel.resetSettings();
             }
         });
@@ -144,12 +148,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onDeleteProfile(View view) {
-        ConfirmationDialog confirmationDialog = new ConfirmationDialog();
+        MapRaceDialog confirmationDialog = dialogFactory.getDialog(CONFIRMATION_DIALOG);
 
         confirmationDialog.setMessage("Are you sure you want to delete your profile?");
-        confirmationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
+        confirmationDialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onConfirm(Object obj) {
                 profileModel.deleteUserProfile();
                 finish();
             }
@@ -158,13 +162,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onClearRecords(View view) {
-        ConfirmationDialog confirmationDialog = new ConfirmationDialog();
+        MapRaceDialog confirmationDialog = dialogFactory.getDialog(CONFIRMATION_DIALOG);
         String gameMode = profileModel.getGameMode().getValue();
 
         confirmationDialog.setMessage(String.format("Are you sure you want to clear the records for %s mode?", gameMode));
-        confirmationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
+        confirmationDialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onConfirm(Object obj) {
                 profileModel.clearRecords();
             }
         });
@@ -172,15 +176,15 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onEditUsername(View view) {
-        TextInputDialog textInputDialog = new TextInputDialog();
+        MapRaceDialog textInputDialog = dialogFactory.getDialog(TEXT_INPUT_DIALOG);
 
         textInputDialog.setMessage("Please enter a new username:");
         textInputDialog.setDefaultValue(profileModel.getUsername());
-        textInputDialog.setInputHint("Username");
-        textInputDialog.setTextInputDialogListener(new TextInputDialog.TextInputDialogListener() {
+        textInputDialog.setSetting("Username");
+        textInputDialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
             @Override
-            public void onConfirm(String text) {
-                profileModel.updateUsername(text);
+            public void onConfirm(Object text) {
+                profileModel.updateUsername((String) text);
             }
         });
 

@@ -8,28 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class NotificationDialog extends MapRaceDialog {
-    private String buttonText;
-    private DialogInterface.OnClickListener onClickListener;
-
     public NotificationDialog() {
         super();
-        setButtonText("Ok");
-    }
-
-    public String getButtonText() {
-        return buttonText;
-    }
-
-    public void setButtonText(String buttonText) {
-        this.buttonText = buttonText;
-    }
-
-    public DialogInterface.OnClickListener getOnClickListener() {
-        return onClickListener;
-    }
-
-    public void setOnClickListener(DialogInterface.OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
+        setPositiveButtonText("Ok");
     }
 
     @NonNull
@@ -39,7 +20,14 @@ public class NotificationDialog extends MapRaceDialog {
                 .setTitle(getTitle())
                 .setMessage(getMessage())
                 .setView(getContentView())
-                .setPositiveButton(getButtonText(), getOnClickListener())
+                .setPositiveButton(getPositiveButtonText(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (getOnConfirmListener() != null) {
+                            getOnConfirmListener().onConfirm(null);
+                        }
+                    }
+                })
                 .create();
     }
 }
