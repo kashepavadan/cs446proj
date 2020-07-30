@@ -51,4 +51,22 @@ public class ProfileModel {
         persistenceService.resetPreference();
         refreshPreference();
     }
+
+    public void clearRecords() {
+        persistenceService.deleteRecords();
+        refreshRecords();
+    }
+
+    public void updateUsername(String text) {
+        persistenceService.setUsername(text);
+        refreshUserProfile();
+    }
+
+    public String getUsername() {
+        return persistenceService.getUsername();
+    }
+
+    public GameMode getGameMode() {
+        return persistenceService.getGameMode();
+    }
 }

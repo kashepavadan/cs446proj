@@ -54,7 +54,7 @@ public class PersistenceService {
     }
 
     private String getPreferenceFilename() {
-        return getFilename(preferenceFilename);
+        return preferenceFilename;
     }
 
     private String getRecordsFilename() {
@@ -68,12 +68,9 @@ public class PersistenceService {
     private static Object readObject(Context applicationContext, String filename) {
         Object object = null;
 
-        try {
-            FileInputStream fileInputStream = applicationContext.openFileInput(filename);
+        try (FileInputStream fileInputStream = applicationContext.openFileInput(filename)) {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-
             object = objectInputStream.readObject();
-            fileInputStream.close();
         } catch (FileNotFoundException ignored) {
 
         } catch (IOException | ClassNotFoundException e) {
@@ -84,8 +81,7 @@ public class PersistenceService {
     }
 
     private static void writeObject(Context applicationContext, String filename, Object object) {
-        try {
-            FileOutputStream fileOutputStream = applicationContext.openFileOutput(filename, 0);
+        try (FileOutputStream fileOutputStream = applicationContext.openFileOutput(filename, 0)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(object);
             objectOutputStream.close();
@@ -108,14 +104,13 @@ public class PersistenceService {
 
     public void clearAllData() {
         GameMode[] modes = new GameMode[] {GameMode.WALK, GameMode.BIKE, GameMode.CAR};
-        String[] files = new String[] {recordsFilename, preferenceFilename};
+        String[] files = new String[] {recordsFilename};
 
         deleteFile(applicationContext, profileFilename);
+        deleteFile(applicationContext, preferenceFilename);
 
         for (GameMode mode : modes) {
-            for (String file : files) {
-                deleteFile(applicationContext, getFilename(file, mode.getValue()));
-            }
+            deleteFile(applicationContext, getFilename(recordsFilename, mode.getValue()));
         }
     }
 
@@ -205,6 +200,12 @@ public class PersistenceService {
 
     public String getUsername() {
         return getUserProfile().getUsername();
+    }
+
+    public void setUsername(String username) {
+        UserProfile profile = getUserProfile();
+        profile.setUsername(username);
+        saveUserProfile(profile);
     }
 
     public Float getLongestDistance() {

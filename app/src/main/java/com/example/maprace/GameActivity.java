@@ -4,6 +4,7 @@ package com.example.maprace;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -17,8 +18,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 
+import com.example.maprace.component.ConfirmationDialog;
+import com.example.maprace.component.NotificationDialog;
+import com.example.maprace.component.LandmarkGoalDialog;
 import com.example.maprace.data.model.GameMode;
 import com.example.maprace.model.GameModel;
 import com.google.android.material.snackbar.Snackbar;
@@ -38,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class GameActivity extends AppCompatActivity implements LandmarkGoalDialog.LandmarkGoalDialogListener {
+public class GameActivity extends AppCompatActivity {
     private static final String[] requiredPermissions = {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -66,8 +69,8 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         gameModel = new GameModel(this);
 
         chronometer = findViewById(R.id.chronometer);
-        goal = (TextView) findViewById(R.id.goal);
-        distance = (TextView) findViewById(R.id.distance);
+        goal = findViewById(R.id.goal);
+        distance = findViewById(R.id.distance);
         mapView = findViewById(R.id.map);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setMultiTouchControls(true);
@@ -80,7 +83,6 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         requestPermissions();
 
         initMap();
-        openLandmarkGoalDialog();
     }
 
     @Override
@@ -100,7 +102,18 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopChronometer();
         gameModel.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        showExitDialog(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                GameActivity.super.onBackPressed();
+            }
+        });
     }
 
     private void initMap() {
@@ -111,8 +124,8 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         mapView.getOverlays().add(myLocationOverlay);
     }
 
-    private void startGame() {
-        gameModel.startGame();
+    private void startGame(int goal) {
+        gameModel.startGame(goal);
         startChronometer();
     }
 
@@ -127,30 +140,36 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         }
     }
 
-    // display current POIs on the screen
-    public void updateUIWithPOI(List<POI> pois) {
-        if (pois != null && !pois.isEmpty()) {
-            markersOverlay.getItems().clear();
-
-            for (POI poi : pois) {
-                Marker poiMarker = new Marker(mapView);
-                poiMarker.setTitle(poi.mType);
-                poiMarker.setSnippet(poi.mDescription);
-                poiMarker.setPosition(poi.mLocation);
-                poiMarker.setVisible(!gameModel.isPOIVisited(poi));
-
-                // issue of using custom icon: https://github.com/osmdroid/osmdroid/issues/1349
-//                poiMarker.setIcon(poiIcon);
-                markersOverlay.add(poiMarker);
-            }
+    public void onPOIsReceived(List<POI> pois) {
+        if (pois.isEmpty()) {
+            NotificationDialog notificationDialog = new NotificationDialog();
+            notificationDialog.setMessage("No nearby landmarks were found.");
+            notificationDialog.show(getSupportFragmentManager(), "emptyPOIDialog");
+            return;
         }
+
+        openLandmarkGoalDialog();
     }
 
     public void updatePOIVisited() {
         updateGoal(gameModel.getGoal());
-        updateUIWithPOI(gameModel.getmPOIs());
+        onUpdatePOIs(gameModel.getmPOIs());
 
         Snackbar.make(findViewById(R.id.coordinator_layout), "Landmark Reached!", 5000).show();
+    }
+
+    public void onUpdatePOIs(List<POI> pois) {
+        markersOverlay.getItems().clear();
+
+        for (POI poi : pois) {
+            Marker poiMarker = new Marker(mapView);
+            poiMarker.setTitle(poi.mType);
+            poiMarker.setSnippet(poi.mDescription);
+            poiMarker.setPosition(poi.mLocation);
+            poiMarker.setVisible(!gameModel.isPOIVisited(poi));
+
+            markersOverlay.add(poiMarker);
+        }
     }
 
     public void updateGoal(int goalNum) {
@@ -164,8 +183,16 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
 
     public void onGameEnded() {
         stopChronometer();
-        GameEndDialog gameEndDialog = new GameEndDialog(this);
-        gameEndDialog.show(getSupportFragmentManager(), "Game end dialog");
+        NotificationDialog gameEndDialog = new NotificationDialog();
+        gameEndDialog.setTitle("Map Race");
+        gameEndDialog.setMessage("Congratulations, you've reached the goal!");
+        gameEndDialog.setOnClickListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        gameEndDialog.show(getSupportFragmentManager(), "gameEndDialog");
     }
 
     ///////////////////////////////////////////////////////////////
@@ -216,20 +243,33 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         chronometer.stop();
     }
 
-    public void onExitGame(View v){
-        stopChronometer();
-        finish();
+    private void showExitDialog(DialogInterface.OnClickListener onClickListener) {
+        ConfirmationDialog confirmationDialog = new ConfirmationDialog();
+
+        confirmationDialog.setMessage("Are you sure you want to exit the game?");
+        confirmationDialog.setOnPositiveClickListener(onClickListener);
+        confirmationDialog.show(getSupportFragmentManager(), "exitGameConfirmationDialog");
+    }
+
+    public void onExitGame(View v) {
+        showExitDialog(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
     }
 
     public void openLandmarkGoalDialog(){
-        DialogFragment dialog = new LandmarkGoalDialog();
-        dialog.show(getSupportFragmentManager(), "landmark goal dialog");
-    }
+        LandmarkGoalDialog dialog = new LandmarkGoalDialog();
 
-    @Override
-    public void onLandmarkGoalDialogPositiveClick(DialogFragment dialog, String goalNum) {
-        // User touched the dialog's positive button
-        gameModel.setGoal(Integer.parseInt(goalNum));
-        startGame();
+        dialog.setMaxValue(gameModel.getmPOIs().size());
+        dialog.setOnConfirmListener(new LandmarkGoalDialog.OnConfirmListener() {
+            @Override
+            public void onConfirm(int goal) {
+                startGame(goal);
+            }
+        });
+        dialog.show(getSupportFragmentManager(), "landmark goal dialog");
     }
 }

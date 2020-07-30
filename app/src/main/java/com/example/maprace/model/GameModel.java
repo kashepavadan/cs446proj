@@ -1,9 +1,14 @@
 package com.example.maprace.model;
 
 import android.location.Location;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.util.Consumer;
 
 import com.example.maprace.GameActivity;
 import com.example.maprace.data.model.GameMode;
+import com.example.maprace.data.model.Preference;
 import com.example.maprace.service.POIService;
 import com.example.maprace.service.PersistenceService;
 
@@ -14,18 +19,25 @@ import org.osmdroid.views.overlay.mylocation.IMyLocationConsumer;
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class GameModel implements IMyLocationConsumer {
+    public enum Status {UNINITIALIZED, LOADING, READY, STARTED, ENDED}
+
+    private static final int MAX_DISTANCE = 5;
+    private static final int MAX_RESULTS_PER_CATEGORY = 10;
     private static final int DISTANCE_THRESHOLD = 150;
     // TODO: Fetch poiTypes from Profile/Settings
     public static final String[] poiTypes = {"restaurant", "bank", "hotel"};
 
+    private Status status;
+
     private final GameActivity gameActivity;
     private final GpsMyLocationProvider locationProvider;
-
     private final PersistenceService persistenceService;
 
     private final GameMode gameMode;
@@ -34,7 +46,6 @@ public class GameModel implements IMyLocationConsumer {
     private float distanceWalked;
     private long elapsedTime;
     private int goal;
-    private boolean finished;
 
     // Note: mPOIs and landmarks store exactly the same candidate landmarks.  POI stores more info than our custom landmark class.
     // Need to decide which one to go with.
@@ -42,6 +53,7 @@ public class GameModel implements IMyLocationConsumer {
     private final Set<GeoPoint> visitedPOIs;
 
     public GameModel(GameActivity gameActivity) {
+        setStatus(Status.UNINITIALIZED);
         this.gameActivity = gameActivity;
         persistenceService = PersistenceService.getInstance();
         gameMode = persistenceService.getGameMode();
@@ -54,8 +66,33 @@ public class GameModel implements IMyLocationConsumer {
         mPOIs = new ArrayList<>();
     }
 
-    public void startGame() {
-        fetchLandmarks();
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void initGame() {
+        setStatus(Status.LOADING);
+        fetchLandmarks(pois -> {
+            // shuffles landmarks according to preference
+            Preference preference = persistenceService.getPreference();
+            List<Preference.Entry> preferenceEntries = preference.getEntries();
+            Map<String, Integer> counter = new HashMap<>();
+
+            for (Preference.Entry entry : preferenceEntries)
+                counter.put(entry.getId(), entry.getValue());
+
+            List<POI> selectedPOIs = new ArrayList<>();
+
+            for (POI poi : pois) {
+                int count = counter.getOrDefault(poi.mType, 0);
+                if (count == 0) continue;
+
+                selectedPOIs.add(poi);
+                counter.put(poi.mType, count - 1);
+            }
+
+            setmPOIs(selectedPOIs);
+            setStatus(Status.READY);
+
+            gameActivity.onPOIsReceived(getmPOIs());
+        });
     }
 
     public GameMode getGameMode() {
@@ -64,6 +101,14 @@ public class GameModel implements IMyLocationConsumer {
 
     private Location getCurrentLocation() {
         return currentLocation;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     private void setCurrentLocation(Location location, IMyLocationProvider locationSource) {
@@ -100,7 +145,7 @@ public class GameModel implements IMyLocationConsumer {
 
     synchronized private void setmPOIs(List<POI> mPOIs) {
         this.mPOIs = mPOIs;
-        if (!finished) gameActivity.updateUIWithPOI(mPOIs);
+        gameActivity.onUpdatePOIs(mPOIs);
     }
 
     private void markPOIVisited(POI poi) {
@@ -125,28 +170,40 @@ public class GameModel implements IMyLocationConsumer {
         gameActivity.updateGoal(goal);
     }
 
-    private void fetchLandmarks() {
+    private void fetchLandmarks(Consumer<List<POI>> consumer) {
         Location location = getCurrentLocation();
         if (location == null) return;
 
         GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
         // maxDistance: max dist to the position, measured in degrees: (0.008 * km)
-        POIService.fetchPOIs(startPoint, poiTypes, 5, 0.008 * 5, this::setmPOIs);
+        POIService.fetchPOIs(startPoint, poiTypes, MAX_RESULTS_PER_CATEGORY, 0.008 * MAX_DISTANCE, consumer);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onLocationChanged(Location location, IMyLocationProvider source) {
-        if (location != null) {
-            setCurrentLocation(location, source);
+        if (location == null) return;
 
-            // updates distance walked
-            float distanceWalked = getDistanceWalked();
-            if (getPreviousLocation() != null) {
-                distanceWalked += location.distanceTo(getPreviousLocation());
+        setCurrentLocation(location, source);
+
+        switch (getStatus()) {
+            case UNINITIALIZED:
+                initGame();
+                break;
+
+            case STARTED: {
+                // updates distance walked
+                float distanceWalked = getDistanceWalked();
+                if (getPreviousLocation() != null) {
+                    distanceWalked += location.distanceTo(getPreviousLocation());
+                }
+                setDistanceWalked(distanceWalked);
+
+                detectLandmarkReached();
             }
-            setDistanceWalked(distanceWalked);
 
-            detectLandmarkReached();
+            default:
+                break;
         }
     }
 
@@ -182,8 +239,13 @@ public class GameModel implements IMyLocationConsumer {
         persistenceService.updateRecords(getDistanceWalked(), getElapsedTime());
     }
 
+    public void startGame(int goal) {
+        setStatus(Status.STARTED);
+        setGoal(goal);
+    }
+
     private void endGame() {
-        finished = true;
+        setStatus(Status.ENDED);
     }
 
     public void onDestroy() {
