@@ -22,4 +22,5 @@
     <string name="time">Time</string>
     <string name="goals">Goals</string>
     <string name="share_my_score">Share my score</string>
+    <string name="clear_records">Clear Records</string>
 </resources>

@@ -30,7 +30,7 @@ public class POIService extends AsyncTask<Object, Void, List<POI>>  {
         Double maxDistance = (Double) params[3];
         NominatimPOIProvider poiProvider = new NominatimPOIProvider("OSMBonusPackTutoUserAgent");
         //GeoNamesPOIProvider poiProvider = new GeoNamesPOIProvider("maprace"); // get wikipedia entries
-        List<POI> pois = new ArrayList<POI>();
+        List<POI> pois = new ArrayList<>();
         for (String poiType : poiTypes) {
             List<POI> pois_of_type = poiProvider.getPOICloseTo(startPoint, poiType, maxResultsPerCategory, maxDistance);
             pois.addAll(pois_of_type);
@@ -39,12 +39,6 @@ public class POIService extends AsyncTask<Object, Void, List<POI>>  {
     }
 
     protected void onPostExecute(List<POI> pois) {
-        if (pois == null || pois.isEmpty()) {
-            System.err.println("Problems occurred when fetching POIs - Empty array");
-            // TODO: What to do if no nearby locations exists ?
-        } else {
-            // TODO: Shuffle POIs according to preference ranking ?
-            consumer.accept(pois);
-        }
+        consumer.accept(pois);
     }
 }

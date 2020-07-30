@@ -18,7 +18,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 
 import com.example.maprace.component.ConfirmationDialog;
 import com.example.maprace.component.NotificationDialog;
@@ -42,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class GameActivity extends AppCompatActivity implements LandmarkGoalDialog.LandmarkGoalDialogListener {
+public class GameActivity extends AppCompatActivity {
     private static final String[] requiredPermissions = {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -84,7 +83,6 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         requestPermissions();
 
         initMap();
-        openLandmarkGoalDialog();
     }
 
     @Override
@@ -115,8 +113,8 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         mapView.getOverlays().add(myLocationOverlay);
     }
 
-    private void startGame() {
-        gameModel.startGame();
+    private void startGame(int goal) {
+        gameModel.startGame(goal);
         startChronometer();
     }
 
@@ -131,30 +129,36 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
         }
     }
 
-    // display current POIs on the screen
-    public void updateUIWithPOI(List<POI> pois) {
-        if (pois != null && !pois.isEmpty()) {
-            markersOverlay.getItems().clear();
-
-            for (POI poi : pois) {
-                Marker poiMarker = new Marker(mapView);
-                poiMarker.setTitle(poi.mType);
-                poiMarker.setSnippet(poi.mDescription);
-                poiMarker.setPosition(poi.mLocation);
-                poiMarker.setVisible(!gameModel.isPOIVisited(poi));
-
-                // issue of using custom icon: https://github.com/osmdroid/osmdroid/issues/1349
-//                poiMarker.setIcon(poiIcon);
-                markersOverlay.add(poiMarker);
-            }
+    public void onPOIsReceived(List<POI> pois) {
+        if (pois.isEmpty()) {
+            NotificationDialog notificationDialog = new NotificationDialog();
+            notificationDialog.setMessage("No nearby landmarks were found.");
+            notificationDialog.show(getSupportFragmentManager(), "emptyPOIDialog");
+            return;
         }
+
+        openLandmarkGoalDialog();
     }
 
     public void updatePOIVisited() {
         updateGoal(gameModel.getGoal());
-        updateUIWithPOI(gameModel.getmPOIs());
+        onUpdatePOIs(gameModel.getmPOIs());
 
         Snackbar.make(findViewById(R.id.coordinator_layout), "Landmark Reached!", 5000).show();
+    }
+
+    public void onUpdatePOIs(List<POI> pois) {
+        markersOverlay.getItems().clear();
+
+        for (POI poi : pois) {
+            Marker poiMarker = new Marker(mapView);
+            poiMarker.setTitle(poi.mType);
+            poiMarker.setSnippet(poi.mDescription);
+            poiMarker.setPosition(poi.mLocation);
+            poiMarker.setVisible(!gameModel.isPOIVisited(poi));
+
+            markersOverlay.add(poiMarker);
+        }
     }
 
     public void updateGoal(int goalNum) {
@@ -244,14 +248,15 @@ public class GameActivity extends AppCompatActivity implements LandmarkGoalDialo
     }
 
     public void openLandmarkGoalDialog(){
-        DialogFragment dialog = new LandmarkGoalDialog();
-        dialog.show(getSupportFragmentManager(), "landmark goal dialog");
-    }
+        LandmarkGoalDialog dialog = new LandmarkGoalDialog();
 
-    @Override
-    public void onLandmarkGoalDialogPositiveClick(DialogFragment dialog, int goal) {
-        // User touched the dialog's positive button
-        gameModel.setGoal(goal);
-        startGame();
+        dialog.setMaxValue(gameModel.getmPOIs().size());
+        dialog.setOnConfirmListener(new LandmarkGoalDialog.OnConfirmListener() {
+            @Override
+            public void onConfirm(int goal) {
+                startGame(goal);
+            }
+        });
+        dialog.show(getSupportFragmentManager(), "landmark goal dialog");
     }
 }

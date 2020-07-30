@@ -113,6 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
         longestDistanceTextView.setText(records.getLongestDistance() != null ?
                 String.format(Locale.getDefault(), "%.2f km", records.getLongestDistance() / 1000) : "N/A");
         bestTimeTextView.setText(getTimeString(records.getBestTime()));
+
         for (ShareButton button: shareButtons) {
             button.setLongestDistance(longestDistanceTextView.getText().toString());
             button.setBestTime(bestTimeTextView.getText().toString());
@@ -159,5 +160,19 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         confirmationDialog.show(getSupportFragmentManager(), "deleteProfileConfirmationDialog");
+    }
+
+    public void onClearRecords(View view) {
+        ConfirmationDialog confirmationDialog = new ConfirmationDialog();
+        String gameMode = profileModel.getUserProfile().getGameMode().getValue();
+
+        confirmationDialog.setMessage(String.format("Are you sure you want to clear the records for %s mode?", gameMode));
+        confirmationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                profileModel.clearRecords();
+            }
+        });
+        confirmationDialog.show(getSupportFragmentManager(), "clearRecordsConfirmationDialog");
     }
 }
