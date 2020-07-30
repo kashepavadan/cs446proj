@@ -44,7 +44,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/edit"
                 app:icon="@drawable/ic_edit"
-                style="@style/Widget.MaterialComponents.Button.TextButton.Icon" />
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                android:onClick="onEditUsername"/>
 
             <LinearLayout
                 android:layout_marginTop="@dimen/margin_small"

@@ -47,7 +47,7 @@ public class LandmarkGoalDialog extends MapRaceDialog {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = getAlertDialogBuilder();
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.landmark_goal_dialog, null);
+        View view = inflater.inflate(R.layout.dialog_landmark_goal, null);
         NumberPicker goalPicker = view.findViewById(R.id.goalPicker);
 
         goalPicker.setMinValue(1);

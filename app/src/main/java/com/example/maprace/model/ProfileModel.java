@@ -83,4 +83,10 @@ public class ProfileModel {
         persistenceService.deleteRecords();
         refreshRecords();
     }
+
+    public void updateUsername(String text) {
+        userProfile.setUsername(text);
+        persistenceService.saveUserProfile(userProfile);
+        refreshUserProfile();
+    }
 }

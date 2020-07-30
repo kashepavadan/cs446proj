@@ -3,7 +3,6 @@ package com.example.maprace;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -14,25 +13,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.maprace.component.ConfirmationDialog;
 import com.example.maprace.component.PreferenceEntryView;
 import com.example.maprace.component.ShareButton;
+import com.example.maprace.component.TextInputDialog;
 import com.example.maprace.data.model.GameMode;
 import com.example.maprace.data.model.Preference;
 import com.example.maprace.data.model.Records;
 import com.example.maprace.data.model.UserProfile;
 import com.example.maprace.model.ProfileModel;
-import com.example.maprace.service.PersistenceService;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class ProfileActivity extends AppCompatActivity implements editProfileDialog.BottomSheetListener {
+public class ProfileActivity extends AppCompatActivity {
     private LinearLayout preferencesContainer;
     private TextView usernameTextView;
     private TextView longestDistanceTextView;
     private TextView bestTimeTextView;
     private ShareButton[] shareButtons;
     private RadioGroup gameModeRadioGroup;
-    private PersistenceService persistenceService;
     private RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -79,24 +77,7 @@ public class ProfileActivity extends AppCompatActivity implements editProfileDia
         bestTimeTextView = findViewById(R.id.bestTime);
         shareButtons = new ShareButton[]{ findViewById(R.id.twitterButton), findViewById(R.id.facebookButton)};
         gameModeRadioGroup = findViewById(R.id.gameModeRadioGroup);
-        persistenceService = PersistenceService.getInstance();
-        Button buttonOpenBottomSheet = findViewById(R.id.editProfileButton);
-        buttonOpenBottomSheet.setOnClickListener(v -> {
-            editProfileDialog bottomSheet = new editProfileDialog();
-            bottomSheet.show(getSupportFragmentManager(), "BottomSheet");
-        });
-
-        gameModeRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
-
         profileModel = new ProfileModel(this);
-    }
-
-
-    @Override
-    public void onFinishEdit(String text) {
-        usernameTextView.setText(text);
-        UserProfile profile = UserProfile.newInstance(text);
-        persistenceService.saveUserProfile(profile);
     }
 
     public void onUpdateProfile(UserProfile userProfile) {
@@ -191,5 +172,21 @@ public class ProfileActivity extends AppCompatActivity implements editProfileDia
             }
         });
         confirmationDialog.show(getSupportFragmentManager(), "clearRecordsConfirmationDialog");
+    }
+
+    public void onEditUsername(View view) {
+        TextInputDialog textInputDialog = new TextInputDialog();
+
+        textInputDialog.setMessage("Please enter a new username:");
+        textInputDialog.setDefaultValue(profileModel.getUserProfile().getUsername());
+        textInputDialog.setInputHint("Username");
+        textInputDialog.setTextInputDialogListener(new TextInputDialog.TextInputDialogListener() {
+            @Override
+            public void onConfirm(String text) {
+                profileModel.updateUsername(text);
+            }
+        });
+
+        textInputDialog.show(getSupportFragmentManager(), "editUsernameDialog");
     }
 }

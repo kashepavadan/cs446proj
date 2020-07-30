@@ -11,6 +11,7 @@ public class MapRaceDialog extends DialogFragment {
     protected View contentView;
 
     public MapRaceDialog() {
+        super();
         setTitle("Map Race");
     }
 
