@@ -102,7 +102,18 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopChronometer();
         gameModel.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        showExitDialog(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                GameActivity.super.onBackPressed();
+            }
+        });
     }
 
     private void initMap() {
@@ -232,19 +243,21 @@ public class GameActivity extends AppCompatActivity {
         chronometer.stop();
     }
 
-    public void onExitGame(View v) {
+    private void showExitDialog(DialogInterface.OnClickListener onClickListener) {
         ConfirmationDialog confirmationDialog = new ConfirmationDialog();
 
         confirmationDialog.setMessage("Are you sure you want to exit the game?");
-        confirmationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
+        confirmationDialog.setOnPositiveClickListener(onClickListener);
+        confirmationDialog.show(getSupportFragmentManager(), "exitGameConfirmationDialog");
+    }
+
+    public void onExitGame(View v) {
+        showExitDialog(new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                stopChronometer();
+            public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
             }
         });
-
-        confirmationDialog.show(getSupportFragmentManager(), "exitGameConfirmationDialog");
     }
 
     public void openLandmarkGoalDialog(){
