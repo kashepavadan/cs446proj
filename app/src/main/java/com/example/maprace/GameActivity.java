@@ -30,7 +30,6 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.Marker;
@@ -120,7 +119,7 @@ public class GameActivity extends AppCompatActivity {
         mapController = mapView.getController();
         myLocationOverlay = new MyLocationNewOverlay(mapView);
 
-        mapController.setZoom(18L);
+        onLocationFocus(null);
         mapView.getOverlays().add(myLocationOverlay);
     }
 
@@ -138,11 +137,6 @@ public class GameActivity extends AppCompatActivity {
 
     public void updateCurrentLocation(Location location, Location prevLocation, IMyLocationProvider source) {
         myLocationOverlay.onLocationChanged(location, source);
-
-        if (prevLocation == null) {
-            GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-            mapController.setCenter(startPoint);
-        }
     }
 
     public void onPOIsReceived(List<POI> pois) {
@@ -294,5 +288,10 @@ public class GameActivity extends AppCompatActivity {
             }
         });
         notificationDialog.show(getSupportFragmentManager(), "speedingNotificationDialog");
+    }
+
+    public void onLocationFocus(View view) {
+        myLocationOverlay.enableFollowLocation();
+        mapController.setZoom(18L);
     }
 }

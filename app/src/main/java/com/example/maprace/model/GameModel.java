@@ -118,7 +118,7 @@ public class GameModel implements IMyLocationConsumer {
         previousLocation  = currentLocation;
         currentLocation = location;
 
-        gameActivity.updateCurrentLocation(location, previousLocation, locationSource);
+        gameActivity.updateCurrentLocation(currentLocation, previousLocation, locationSource);
     }
 
     private Location getPreviousLocation() {
@@ -228,8 +228,8 @@ public class GameModel implements IMyLocationConsumer {
                 }
                 setDistanceWalked(distanceWalked);
 
-                detectSpeeding();
                 detectLandmarkReached();
+                detectSpeeding();
             }
 
             default:
@@ -276,8 +276,10 @@ public class GameModel implements IMyLocationConsumer {
     }
 
     public void startGame(int goal) {
-        setStatus(Status.STARTED);
-        setGoal(goal);
+        if (getStatus() == Status.READY) {
+            setStatus(Status.STARTED);
+            setGoal(goal);
+        }
     }
 
     public void endGame() {
