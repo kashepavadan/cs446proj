@@ -188,4 +188,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         textInputDialog.show(getSupportFragmentManager(), "editUsernameDialog");
     }
+
+    public void onExitProfile(View v) {
+        ProfileActivity.super.onBackPressed();
+    }
 }

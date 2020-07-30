@@ -96,4 +96,15 @@
         </LinearLayout>
     </ScrollView>
 
+    <Button
+        android:id="@+id/exitHelpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#009688"
+        android:onClick="onExitHelp"
+        android:text="@string/exit"
+        android:textColor="#FFFFFF"
+        tools:layout_editor_absoluteX="25dp"
+        tools:layout_editor_absoluteY="29dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
