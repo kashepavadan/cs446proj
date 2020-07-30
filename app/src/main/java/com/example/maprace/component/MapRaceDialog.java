@@ -1,27 +1,32 @@
 package com.example.maprace.component;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
-import android.view.View;
+import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 public class MapRaceDialog extends DialogFragment {
-    protected String title;
-    protected String message;
-    protected View contentView;
-    protected String positiveButtonText;
-    protected String negativeButtonText;
-    protected DialogInterface.OnClickListener onNegativeClickListener;
-    protected LandmarkGoalDialog.OnConfirmListener onConfirmListener;
-
     public interface OnConfirmListener {
         void onConfirm(Object obj);
     }
 
+    protected String title;
+    protected String message;
+    protected String positiveButtonText;
+    protected String negativeButtonText;
+    protected boolean canceledOnTouchOutside;
+    protected DialogInterface.OnClickListener onPositiveClickListener;
+    protected DialogInterface.OnClickListener onNegativeClickListener;
+    protected OnConfirmListener onConfirmListener;
+
     public MapRaceDialog() {
         super();
         setTitle("Map Race");
+        setCanceledOnTouchOutside(true);
     }
 
     protected String getTitle() {
@@ -40,14 +45,6 @@ public class MapRaceDialog extends DialogFragment {
         this.message = message;
     }
 
-    protected View getContentView() {
-        return contentView;
-    }
-
-    protected void setContentView(View contentView) {
-        this.contentView = contentView;
-    }
-
     protected String getPositiveButtonText() {
         return positiveButtonText;
     }
@@ -64,15 +61,23 @@ public class MapRaceDialog extends DialogFragment {
         this.negativeButtonText = negativeButtonText;
     }
 
-    protected MapRaceDialog.OnConfirmListener getOnConfirmListener() {
-        return onConfirmListener;
+    public boolean isCanceledOnTouchOutside() {
+        return canceledOnTouchOutside;
     }
 
-    public void setOnConfirmListener(MapRaceDialog.OnConfirmListener onConfirmListener) {
-        this.onConfirmListener = onConfirmListener;
+    public void setCanceledOnTouchOutside(boolean canceledOnTouchOutside) {
+        this.canceledOnTouchOutside = canceledOnTouchOutside;
     }
 
-    protected DialogInterface.OnClickListener getOnNegativeClickListener() {
+    public DialogInterface.OnClickListener getOnPositiveClickListener() {
+        return onPositiveClickListener;
+    }
+
+    public void setOnPositiveClickListener(DialogInterface.OnClickListener onPositiveClickListener) {
+        this.onPositiveClickListener = onPositiveClickListener;
+    }
+
+    public DialogInterface.OnClickListener getOnNegativeClickListener() {
         return onNegativeClickListener;
     }
 
@@ -80,7 +85,32 @@ public class MapRaceDialog extends DialogFragment {
         this.onNegativeClickListener = onNegativeClickListener;
     }
 
+    public OnConfirmListener getOnConfirmListener() {
+        return onConfirmListener;
+    }
+
+    public void setOnConfirmListener(OnConfirmListener onConfirmListener) {
+        this.onConfirmListener = onConfirmListener;
+    }
+
     protected AlertDialog.Builder getAlertDialogBuilder() {
-        return new AlertDialog.Builder(getActivity());
+        return new AlertDialog.Builder(getActivity())
+                .setTitle(getTitle())
+                .setMessage(getMessage())
+                .setPositiveButton(getPositiveButtonText(), getOnPositiveClickListener())
+                .setNegativeButton(getNegativeButtonText(), getOnNegativeClickListener());
+    }
+
+    protected Dialog onPrepareDialog(@Nullable Bundle savedInstanceState) {
+        return getAlertDialogBuilder().create();
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Dialog dialog = onPrepareDialog(savedInstanceState);
+        dialog.setCanceledOnTouchOutside(isCanceledOnTouchOutside());
+
+        return dialog;
     }
 }

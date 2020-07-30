@@ -35,7 +35,7 @@ public class TextInputDialog extends MapRaceDialog {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+    public Dialog onPrepareDialog(@Nullable Bundle savedInstanceState) {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_text_input, null);
         EditText usernameEditText = view.findViewById(R.id.inputTextEdit);
@@ -43,12 +43,8 @@ public class TextInputDialog extends MapRaceDialog {
         usernameEditText.setText(getDefaultValue());
         usernameEditText.setHint(getInputHint());
 
-        setContentView(view);
-
         return getAlertDialogBuilder()
-                .setTitle(getTitle())
-                .setMessage(getMessage())
-                .setView(getContentView())
+                .setView(view)
                 .setPositiveButton(getPositiveButtonText(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

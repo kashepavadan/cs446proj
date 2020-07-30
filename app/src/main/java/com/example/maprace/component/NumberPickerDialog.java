@@ -12,15 +12,22 @@ import androidx.annotation.NonNull;
 
 import com.example.maprace.R;
 
-public class LandmarkGoalDialog extends MapRaceDialog {
+public class NumberPickerDialog extends MapRaceDialog {
+    private int minValue;
     private int maxValue;
-    private int minValue = 1;
 
-    public LandmarkGoalDialog() {
+    public NumberPickerDialog() {
         super();
         setMessage("Select the number of landmarks you aim to visit:");
         setPositiveButtonText("Confirm");
-        setMaxValue(10);
+    }
+
+    public int getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(int minValue) {
+        this.minValue = minValue;
     }
 
     public int getMaxValue() {
@@ -29,12 +36,11 @@ public class LandmarkGoalDialog extends MapRaceDialog {
 
     public void setMaxValue(int maxValue) {
         this.maxValue = maxValue;
-
     }
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onPrepareDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = getAlertDialogBuilder();
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_landmark_goal, null);
@@ -43,14 +49,13 @@ public class LandmarkGoalDialog extends MapRaceDialog {
         goalPicker.setMinValue(minValue);
         goalPicker.setMaxValue(getMaxValue());
 
-        return builder.setTitle(getTitle())
-                .setMessage(getMessage())
+        return builder
                 .setView(view)
                 .setPositiveButton(getPositiveButtonText(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (getOnConfirmListener() != null) {
-                            getOnConfirmListener().onConfirm(new Integer(goalPicker.getValue()));
+                            getOnConfirmListener().onConfirm(goalPicker.getValue());
                         }
                     }
                 })
