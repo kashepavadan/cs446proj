@@ -8,10 +8,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-import com.example.maprace.data.model.Preference;
-import com.example.maprace.data.model.Records;
-import com.example.maprace.data.model.UserProfile;
 import com.example.maprace.service.PersistenceService;
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -51,15 +47,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void handleSubmit(View view) {
-        UserProfile profile = UserProfile.newInstance(usernameEditText.getText().toString());
-        persistenceService.saveUserProfile(profile);
-
-        Preference userPref = Preference.getDefaultPreference();
-        persistenceService.savePreference(userPref);
-
-        Records records = Records.getDefaultRecords();
-        persistenceService.saveRecords(records);
-
+        persistenceService.first_time_register(usernameEditText.getText().toString());
         finish();
     }
 }

@@ -2,17 +2,11 @@ package com.example.maprace.model;
 
 import com.example.maprace.ProfileActivity;
 import com.example.maprace.data.model.GameMode;
-import com.example.maprace.data.model.Preference;
-import com.example.maprace.data.model.Records;
-import com.example.maprace.data.model.UserProfile;
 import com.example.maprace.service.PersistenceService;
 
 public class ProfileModel {
     private final ProfileActivity profileActivity;
     private final PersistenceService persistenceService;
-
-    private UserProfile userProfile;
-    private Preference preference;
 
     public ProfileModel(ProfileActivity profileActivity) {
         this.profileActivity = profileActivity;
@@ -23,18 +17,9 @@ public class ProfileModel {
         refreshPreference();
     }
 
-    public UserProfile getUserProfile() {
-        return userProfile;
-    }
-
-    public void setUserProfile(UserProfile userProfile) {
-        persistenceService.saveUserProfile(userProfile);
-        refreshUserProfile();
-    }
-
     public void setGameMode(GameMode gameMode) {
-        userProfile.setGameMode(gameMode);
-        setUserProfile(userProfile);
+        persistenceService.setGameMode(gameMode);
+        refreshUserProfile();
 
         // records and preference are dependant on game mode
         refreshRecords();
@@ -46,37 +31,25 @@ public class ProfileModel {
     }
 
     private void refreshUserProfile() {
-        userProfile = persistenceService.getUserProfile();
-        profileActivity.onUpdateProfile(userProfile);
-    }
-
-    public void setRecords(Records records) {
-        persistenceService.saveRecords(records);
-        refreshRecords();
+        profileActivity.onUpdateProfile(persistenceService.getUsername(), persistenceService.getGameMode());
     }
 
     private void refreshRecords() {
-        Records records = persistenceService.getRecords();
-        profileActivity.onUpdateRecords(records);
-    }
-
-    public void setPreference(Preference preference) {
-        persistenceService.savePreference(preference);
-        refreshPreference();
+        profileActivity.onUpdateRecords(persistenceService.getLongestDistance(), persistenceService.getBestTime());
     }
 
     public void updatePreference(String id, int value) {
-        preference.setEntry(id, value);
-        setPreference(preference);
+        persistenceService.updatePreference(id, value);
+        refreshPreference();
     }
 
     private void refreshPreference() {
-        preference = persistenceService.getPreference();
-        profileActivity.onUpdatePreference(preference);
+        profileActivity.onUpdatePreference(persistenceService.getPreference());
     }
 
     public void resetSettings() {
-        setPreference(Preference.getDefaultPreference());
+        persistenceService.resetPreference();
+        refreshPreference();
     }
 
     public void clearRecords() {
@@ -85,8 +58,15 @@ public class ProfileModel {
     }
 
     public void updateUsername(String text) {
-        userProfile.setUsername(text);
-        persistenceService.saveUserProfile(userProfile);
+        persistenceService.setUsername(text);
         refreshUserProfile();
+    }
+
+    public String getUsername() {
+        return persistenceService.getUsername();
+    }
+
+    public GameMode getGameMode() {
+        return persistenceService.getGameMode();
     }
 }

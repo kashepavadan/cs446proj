@@ -1,13 +1,14 @@
 package com.example.maprace.model;
 
 import android.location.Location;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.util.Consumer;
 
 import com.example.maprace.GameActivity;
 import com.example.maprace.data.model.GameMode;
 import com.example.maprace.data.model.Preference;
-import com.example.maprace.data.model.Records;
 import com.example.maprace.service.POIService;
 import com.example.maprace.service.PersistenceService;
 
@@ -65,6 +66,7 @@ public class GameModel implements IMyLocationConsumer {
         mPOIs = new ArrayList<>();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initGame() {
         setStatus(Status.LOADING);
         fetchLandmarks(pois -> {
@@ -177,6 +179,7 @@ public class GameModel implements IMyLocationConsumer {
         POIService.fetchPOIs(startPoint, poiTypes, MAX_RESULTS_PER_CATEGORY, 0.008 * MAX_DISTANCE, consumer);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onLocationChanged(Location location, IMyLocationProvider source) {
         if (location == null) return;
@@ -233,20 +236,7 @@ public class GameModel implements IMyLocationConsumer {
     }
 
     private void updateScore() {
-        Records records = persistenceService.getRecords();
-        boolean shouldSave = false;
-
-        if (records.getLongestDistance() == null || records.getLongestDistance() < getDistanceWalked()) {
-            records.setLongestDistance(getDistanceWalked());
-            shouldSave = true;
-        }
-
-        if (records.getBestTime() == null || records.getBestTime() > getElapsedTime()) {
-            records.setBestTime(getElapsedTime());
-            shouldSave = true;
-        }
-
-        if (shouldSave) persistenceService.saveRecords(records);
+        persistenceService.updateRecords(getDistanceWalked(), getElapsedTime());
     }
 
     public void startGame(int goal) {

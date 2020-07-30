@@ -16,8 +16,6 @@ import com.example.maprace.component.ShareButton;
 import com.example.maprace.component.TextInputDialog;
 import com.example.maprace.data.model.GameMode;
 import com.example.maprace.data.model.Preference;
-import com.example.maprace.data.model.Records;
-import com.example.maprace.data.model.UserProfile;
 import com.example.maprace.model.ProfileModel;
 
 import java.util.List;
@@ -80,10 +78,9 @@ public class ProfileActivity extends AppCompatActivity {
         profileModel = new ProfileModel(this);
     }
 
-    public void onUpdateProfile(UserProfile userProfile) {
-        usernameTextView.setText(userProfile.getUsername());
+    public void onUpdateProfile(String username, GameMode gameMode) {
+        usernameTextView.setText(username);
 
-        GameMode gameMode = userProfile.getGameMode();
         if (gameMode == null) return;
 
         int id = R.id.walkModeRadio;;
@@ -107,10 +104,10 @@ public class ProfileActivity extends AppCompatActivity {
         gameModeRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
     }
 
-    public void onUpdateRecords(Records records) {
-        longestDistanceTextView.setText(records.getLongestDistance() != null ?
-                String.format(Locale.getDefault(), "%.2f km", records.getLongestDistance() / 1000) : "N/A");
-        bestTimeTextView.setText(getTimeString(records.getBestTime()));
+    public void onUpdateRecords(Float longestDistance, Long bestTime) {
+        longestDistanceTextView.setText(longestDistance != null ?
+                String.format(Locale.getDefault(), "%.2f km", longestDistance / 1000) : "N/A");
+        bestTimeTextView.setText(getTimeString(bestTime));
 
         for (ShareButton button: shareButtons) {
             button.setLongestDistance(longestDistanceTextView.getText().toString());
@@ -162,7 +159,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void onClearRecords(View view) {
         ConfirmationDialog confirmationDialog = new ConfirmationDialog();
-        String gameMode = profileModel.getUserProfile().getGameMode().getValue();
+        String gameMode = profileModel.getGameMode().getValue();
 
         confirmationDialog.setMessage(String.format("Are you sure you want to clear the records for %s mode?", gameMode));
         confirmationDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
@@ -178,7 +175,7 @@ public class ProfileActivity extends AppCompatActivity {
         TextInputDialog textInputDialog = new TextInputDialog();
 
         textInputDialog.setMessage("Please enter a new username:");
-        textInputDialog.setDefaultValue(profileModel.getUserProfile().getUsername());
+        textInputDialog.setDefaultValue(profileModel.getUsername());
         textInputDialog.setInputHint("Username");
         textInputDialog.setTextInputDialogListener(new TextInputDialog.TextInputDialogListener() {
             @Override
