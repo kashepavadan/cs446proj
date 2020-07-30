@@ -4,7 +4,6 @@ import android.location.Location;
 
 import com.example.maprace.GameActivity;
 import com.example.maprace.data.model.GameMode;
-import com.example.maprace.data.model.Records;
 import com.example.maprace.service.POIService;
 import com.example.maprace.service.PersistenceService;
 
@@ -180,20 +179,7 @@ public class GameModel implements IMyLocationConsumer {
     }
 
     private void updateScore() {
-        Records records = persistenceService.getRecords();
-        boolean shouldSave = false;
-
-        if (records.getLongestDistance() == null || records.getLongestDistance() < getDistanceWalked()) {
-            records.setLongestDistance(getDistanceWalked());
-            shouldSave = true;
-        }
-
-        if (records.getBestTime() == null || records.getBestTime() > getElapsedTime()) {
-            records.setBestTime(getElapsedTime());
-            shouldSave = true;
-        }
-
-        if (shouldSave) persistenceService.saveRecords(records);
+        persistenceService.updateRecords(getDistanceWalked(), getElapsedTime());
     }
 
     private void endGame() {

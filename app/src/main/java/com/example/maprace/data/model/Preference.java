@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Preference implements Serializable {
-    public static final int MIN_VALUE = 0;
-    public static final int MAX_VALUE = 10;
+    private static final int MIN_VALUE = 0;
+    private static final int MAX_VALUE = 10;
     private static final int DEFAULT_VALUE = 5;
 
     public static class Entry implements Serializable {

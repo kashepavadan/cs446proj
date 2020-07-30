@@ -119,14 +119,14 @@ public class PersistenceService {
         }
     }
 
-    public UserProfile getUserProfile() {
+    private UserProfile getUserProfile() {
         Object object = readObject(applicationContext, getProfileFilename());
 
         if (object == null) return new UserProfile();
         return (UserProfile) object;
     }
 
-    public void saveUserProfile(UserProfile profile) {
+    private void saveUserProfile(UserProfile profile) {
         setMode(profile.getGameMode());
         writeObject(applicationContext, getProfileFilename(), profile);
     }
@@ -147,7 +147,7 @@ public class PersistenceService {
         return (Preference) object;
     }
 
-    public void savePreference(Preference pref) {
+    private void savePreference(Preference pref) {
         writeObject(applicationContext, getPreferenceFilename(), pref);
     }
 
@@ -155,14 +155,14 @@ public class PersistenceService {
         deleteFile(applicationContext, getPreferenceFilename());
     }
 
-    public Records getRecords() {
+    private Records getRecords() {
         Object object = readObject(applicationContext, getRecordsFilename());
 
         if (object == null) return Records.getDefaultRecords();
         return (Records) object;
     }
 
-    public void saveRecords(Records records) {
+    private void saveRecords(Records records) {
         writeObject(applicationContext, getRecordsFilename(), records);
     }
 
@@ -172,5 +172,62 @@ public class PersistenceService {
 
     public GameMode getGameMode() {
         return getUserProfile().getGameMode();
+    }
+
+    public void updateRecords(float distanceWalked, long elapsedTime) {
+        Records records = getRecords();
+
+        boolean shouldSave = false;
+
+        if (records.getLongestDistance() == null || records.getLongestDistance() < distanceWalked) {
+            records.setLongestDistance(distanceWalked);
+            shouldSave = true;
+        }
+
+        if (records.getBestTime() == null || records.getBestTime() > elapsedTime) {
+            records.setBestTime(elapsedTime);
+            shouldSave = true;
+        }
+
+        if (shouldSave) saveRecords(records);
+    }
+
+    public void first_time_register(String username) {
+        UserProfile profile = UserProfile.newInstance(username);
+        saveUserProfile(profile);
+
+        Preference userPref = Preference.getDefaultPreference();
+        savePreference(userPref);
+
+        Records records = Records.getDefaultRecords();
+        saveRecords(records);
+    }
+
+    public String getUsername() {
+        return getUserProfile().getUsername();
+    }
+
+    public Float getLongestDistance() {
+        return getRecords().getLongestDistance();
+    }
+
+    public Long getBestTime() {
+        return getRecords().getBestTime();
+    }
+
+    public void setGameMode(GameMode gameMode) {
+        UserProfile profile = getUserProfile();
+        profile.setGameMode(gameMode);
+        saveUserProfile(profile);
+    }
+
+    public void resetPreference() {
+        savePreference(Preference.getDefaultPreference());
+    }
+
+    public void updatePreference(String id, int value) {
+        Preference preference = getPreference();
+        preference.setEntry(id, value);
+        savePreference(preference);
     }
 }
