@@ -46,7 +46,7 @@ public class NumberPickerDialog extends MapRaceDialog {
         View view = inflater.inflate(R.layout.dialog_landmark_goal, null);
         NumberPicker goalPicker = view.findViewById(R.id.goalPicker);
 
-        goalPicker.setMinValue(minValue);
+        goalPicker.setMinValue(getMinValue());
         goalPicker.setMaxValue(getMaxValue());
 
         return builder
