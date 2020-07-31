@@ -21,13 +21,13 @@ public class TextInputDialog extends MapRaceDialog {
         setPositiveButtonText("Ok");
     }
 
-    public String getDefaultValue() { return defaultValue; }
+    private String getDefaultValue() { return defaultValue; }
 
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
     }
 
-    public String getInputHint() { return inputHint; }
+    private String getInputHint() { return inputHint; }
 
     public void setInputHint(String inputHint) {
         this.inputHint = inputHint;
@@ -35,7 +35,7 @@ public class TextInputDialog extends MapRaceDialog {
 
     @NonNull
     @Override
-    public Dialog onPrepareDialog(@Nullable Bundle savedInstanceState) {
+    protected Dialog onPrepareDialog(@Nullable Bundle savedInstanceState) {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_text_input, null);
         EditText usernameEditText = view.findViewById(R.id.inputTextEdit);
