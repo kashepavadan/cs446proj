@@ -33,7 +33,7 @@ public class MapRaceDialog extends DialogFragment {
         return title;
     }
 
-    public void setTitle(String title) {
+    protected void setTitle(String title) {
         this.title = title;
     }
 
@@ -61,7 +61,7 @@ public class MapRaceDialog extends DialogFragment {
         this.negativeButtonText = negativeButtonText;
     }
 
-    public boolean isCanceledOnTouchOutside() {
+    protected boolean isCanceledOnTouchOutside() {
         return canceledOnTouchOutside;
     }
 
@@ -69,7 +69,7 @@ public class MapRaceDialog extends DialogFragment {
         this.canceledOnTouchOutside = canceledOnTouchOutside;
     }
 
-    public DialogInterface.OnClickListener getOnPositiveClickListener() {
+    private DialogInterface.OnClickListener getOnPositiveClickListener() {
         return onPositiveClickListener;
     }
 
@@ -77,7 +77,7 @@ public class MapRaceDialog extends DialogFragment {
         this.onPositiveClickListener = onPositiveClickListener;
     }
 
-    public DialogInterface.OnClickListener getOnNegativeClickListener() {
+    protected DialogInterface.OnClickListener getOnNegativeClickListener() {
         return onNegativeClickListener;
     }
 
@@ -85,7 +85,7 @@ public class MapRaceDialog extends DialogFragment {
         this.onNegativeClickListener = onNegativeClickListener;
     }
 
-    public OnConfirmListener getOnConfirmListener() {
+    protected OnConfirmListener getOnConfirmListener() {
         return onConfirmListener;
     }
 

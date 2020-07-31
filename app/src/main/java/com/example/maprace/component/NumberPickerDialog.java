@@ -22,7 +22,7 @@ public class NumberPickerDialog extends MapRaceDialog {
         setPositiveButtonText("Confirm");
     }
 
-    public int getMinValue() {
+    private int getMinValue() {
         return minValue;
     }
 
@@ -30,7 +30,7 @@ public class NumberPickerDialog extends MapRaceDialog {
         this.minValue = minValue;
     }
 
-    public int getMaxValue() {
+    private int getMaxValue() {
         return maxValue;
     }
 
@@ -40,7 +40,7 @@ public class NumberPickerDialog extends MapRaceDialog {
 
     @NonNull
     @Override
-    public Dialog onPrepareDialog(Bundle savedInstanceState) {
+    protected Dialog onPrepareDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = getAlertDialogBuilder();
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_landmark_goal, null);
