@@ -26,18 +26,21 @@ public class PersistenceService {
     private final Context applicationContext;
     private GameMode mode;
 
-    public PersistenceService(Context applicationContext) {
+    private PersistenceService(Context applicationContext) {
         this.applicationContext = applicationContext;
         mode = null;
     }
 
-    public static void init(Context applicationContext) {
-        instance = new PersistenceService(applicationContext);
-        instance.setMode(instance.getGameMode());
-    }
-
     public static PersistenceService getInstance() {
         return instance;
+    }
+
+    public static PersistenceService getInstance(Context applicationContext) {
+                if(instance == null){
+                    instance = new PersistenceService(applicationContext);
+                    instance.setMode(instance.getGameMode());
+                }
+                return instance;
     }
 
     private String getFilename(String prefix, String suffix) {
