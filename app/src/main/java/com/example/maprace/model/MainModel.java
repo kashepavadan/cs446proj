@@ -9,9 +9,8 @@ public class MainModel {
 
     public MainModel(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
-
-        PersistenceService.init(mainActivity.getApplicationContext());
-        persistenceService = PersistenceService.getInstance();
+        
+        persistenceService = PersistenceService.getInstance(mainActivity.getApplicationContext());
 
         refreshGameMode();
     }
