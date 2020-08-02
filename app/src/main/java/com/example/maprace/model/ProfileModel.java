@@ -31,7 +31,7 @@ public class ProfileModel {
     }
 
     private void refreshUserProfile() {
-        profileActivity.onUpdateProfile(persistenceService.getUsername(), persistenceService.getGameMode());
+        profileActivity.onUpdateProfile(persistenceService.getUsername(), persistenceService.getGameMode(), persistenceService.getMaxDistance());
     }
 
     private void refreshRecords() {
@@ -50,6 +50,9 @@ public class ProfileModel {
     public void resetSettings() {
         persistenceService.resetPreference();
         refreshPreference();
+        persistenceService.resetGameMode();
+        persistenceService.resetMaxDistance();
+        refreshUserProfile();
     }
 
     public void clearRecords() {
@@ -62,8 +65,17 @@ public class ProfileModel {
         refreshUserProfile();
     }
 
+    public void updateMaxDistance(int maxDist){
+        persistenceService.setMaxDistance(maxDist);
+        refreshUserProfile();
+    }
+
     public String getUsername() {
         return persistenceService.getUsername();
+    }
+
+    public int getMaxDistance() {
+        return persistenceService.getMaxDistance();
     }
 
     public GameMode getGameMode() {

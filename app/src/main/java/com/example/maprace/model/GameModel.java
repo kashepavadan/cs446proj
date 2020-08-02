@@ -29,7 +29,6 @@ public class GameModel implements IMyLocationConsumer {
     public enum Status {UNINITIALIZED, LOADING, READY, STARTED, ENDED}
     public static final String[] poiTypes = {"restaurant", "bank", "hotel"};
 
-    private static final int MAX_DISTANCE = 5;
     private static final int MAX_RESULTS_PER_CATEGORY = 10;
     private static final int DISTANCE_THRESHOLD = 150;
 
@@ -202,7 +201,7 @@ public class GameModel implements IMyLocationConsumer {
 
         GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
         // maxDistance: max dist to the position, measured in degrees: (0.008 * km)
-        POIService.fetchPOIs(startPoint, poiTypes, MAX_RESULTS_PER_CATEGORY, 0.008 * MAX_DISTANCE, consumer);
+        POIService.fetchPOIs(startPoint, poiTypes, MAX_RESULTS_PER_CATEGORY, 0.008 * persistenceService.getMaxDistance(), consumer);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

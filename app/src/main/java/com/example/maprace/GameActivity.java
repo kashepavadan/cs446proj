@@ -265,6 +265,7 @@ public class GameActivity extends AppCompatActivity {
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCanceledOnTouchOutside(false);
+        dialog.setMessage("Select the number of landmarks you aim to visit:");
         dialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
             @Override
             public void onConfirm(Object goal) {

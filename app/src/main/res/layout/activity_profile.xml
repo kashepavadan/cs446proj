@@ -155,16 +155,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingVertical="@dimen/padding_large">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_medium"
                     android:text="@string/game_mode"
-                    android:textSize="@dimen/text_size_caption"
-                    android:layout_marginBottom="@dimen/margin_medium"/>
+                    android:textSize="@dimen/text_size_caption" />
 
                 <RadioGroup
                     android:id="@+id/gameModeRadioGroup"
@@ -172,44 +174,72 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="3">
+
                     <RadioButton
                         android:id="@+id/walkModeRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/walk"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:text="@string/walk" />
+
                     <RadioButton
                         android:id="@+id/bikeModeRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/bike"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:text="@string/bike" />
+
                     <RadioButton
                         android:id="@+id/carModeRadio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/car"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:text="@string/car" />
                 </RadioGroup>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/margin_large">
+                android:layout_marginTop="@dimen/margin_large"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_medium"
                     android:text="@string/preferences"
-                    android:textSize="@dimen/text_size_caption"
-                    android:layout_marginBottom="@dimen/margin_medium"/>
+                    android:textSize="@dimen/text_size_caption" />
+
                 <LinearLayout
                     android:id="@+id/preferencesContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
+                    android:orientation="vertical" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    android:text="@string/maximum_distance"
+                    android:textSize="@dimen/text_size_caption" />
+
+                <Button
+                    android:id="@+id/maxDistanceButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onEditMaxDistance"
+                    android:text="@string/n_a" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout

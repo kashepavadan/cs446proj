@@ -3,6 +3,7 @@ package com.example.maprace;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -29,6 +30,9 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView bestTimeTextView;
     private ShareButton[] shareButtons;
     private RadioGroup gameModeRadioGroup;
+    private Button maxDistanceButton;
+
+    private static final int TOP_MAX_DISTANCE = 100;
 
     private RadioGroup.OnCheckedChangeListener onCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override
@@ -72,6 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         preferencesContainer = findViewById(R.id.preferencesContainer);
         usernameTextView = findViewById(R.id.usernameTextView);
+        maxDistanceButton = findViewById(R.id.maxDistanceButton);
         longestDistanceTextView = findViewById(R.id.longestDistance);
         bestTimeTextView = findViewById(R.id.bestTime);
         shareButtons = new ShareButton[]{ findViewById(R.id.twitterButton), findViewById(R.id.facebookButton)};
@@ -79,8 +84,9 @@ public class ProfileActivity extends AppCompatActivity {
         profileModel = new ProfileModel(this);
     }
 
-    public void onUpdateProfile(String username, GameMode gameMode) {
+    public void onUpdateProfile(String username, GameMode gameMode, int maxDistance) {
         usernameTextView.setText(username);
+        maxDistanceButton.setText(String.valueOf(maxDistance));
 
         if (gameMode == null) return;
 
@@ -184,6 +190,20 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         textInputDialog.show(getSupportFragmentManager(), "editUsernameDialog");
+    }
+
+    public void onEditMaxDistance(View view) {
+        MapRaceDialog distanceDialog = MapRaceDialogFactory.getNumberPickerDialog(1,TOP_MAX_DISTANCE);
+
+        distanceDialog.setMessage("Please select the maximum radius for landmark generation");
+        distanceDialog.setOnConfirmListener(new MapRaceDialog.OnConfirmListener() {
+            @Override
+            public void onConfirm(Object obj) {
+                profileModel.updateMaxDistance(((Integer) obj).intValue());
+            }
+        });
+
+        distanceDialog.show(getSupportFragmentManager(), "editMaxDistanceDialog");
     }
 
     public void onExitProfile(View v) {

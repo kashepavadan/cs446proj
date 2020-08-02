@@ -222,6 +222,12 @@ public class PersistenceService {
         saveUserProfile(profile);
     }
 
+    public void resetGameMode() {
+        UserProfile profile = getUserProfile();
+        profile.resetGameMode();
+        saveUserProfile(profile);
+    }
+
     public void resetPreference() {
         savePreference(Preference.getDefaultPreference());
     }
@@ -230,5 +236,21 @@ public class PersistenceService {
         Preference preference = getPreference();
         preference.setEntry(id, value);
         savePreference(preference);
+    }
+
+    public int getMaxDistance() {
+        return getUserProfile().getMaxDistance();
+    }
+
+    public void setMaxDistance(int maxDist) {
+        UserProfile profile = getUserProfile();
+        profile.setMaxDistance(maxDist);
+        saveUserProfile(profile);
+    }
+
+    public void resetMaxDistance() {
+        UserProfile profile = getUserProfile();
+        profile.resetMaxDistance();
+        saveUserProfile(profile);
     }
 }

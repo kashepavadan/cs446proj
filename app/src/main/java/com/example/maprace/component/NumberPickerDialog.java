@@ -18,7 +18,6 @@ public class NumberPickerDialog extends MapRaceDialog {
 
     public NumberPickerDialog() {
         super();
-        setMessage("Select the number of landmarks you aim to visit:");
         setPositiveButtonText("Confirm");
     }
 
