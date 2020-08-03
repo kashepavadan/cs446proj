@@ -15,67 +15,71 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryLight"
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/exitButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="6dp"
-                android:text="@string/exit"
-                android:onClick="onExitGame"/>
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="#FFFFFF"
+                android:onClick="onExitGame"
+                android:text="@string/exit" />
 
             <ImageView
                 android:id="@+id/timer"
-                android:src="@drawable/timer"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingHorizontal="4dp"
+                android:contentDescription="@string/time"
                 android:gravity="center"
-                android:contentDescription="@string/time" />
+                android:paddingHorizontal="4dp"
+                android:src="@drawable/timer" />
 
             <Chronometer
                 android:id="@+id/chronometer"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
                 android:gravity="center"
-                android:textSize="20sp"
-                android:layout_marginEnd="6dp" />
+                android:textSize="20sp" />
 
             <ImageView
                 android:id="@+id/flag"
-                android:src="@drawable/flag"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingHorizontal="4dp"
+                android:contentDescription="@string/goals"
                 android:gravity="center"
-                android:contentDescription="@string/goals" />
+                android:paddingHorizontal="4dp"
+                android:src="@drawable/flag" />
 
             <TextView
                 android:id="@+id/goal"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textSize="20sp"
+                android:layout_marginEnd="6dp"
                 android:gravity="center"
                 android:text="@string/n_a"
-                android:layout_marginEnd="6dp"/>
+                android:textSize="20sp" />
 
             <ImageView
                 android:id="@+id/gameModeIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingHorizontal="4dp"
-                android:src="@drawable/walk"
+                android:contentDescription="@string/game_mode"
                 android:gravity="center"
-                android:contentDescription="@string/game_mode" />
+                android:paddingHorizontal="4dp"
+                android:src="@drawable/walk" />
 
             <TextView
                 android:id="@+id/distance"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textSize="20sp"
+                android:layout_marginEnd="6dp"
                 android:gravity="center"
                 android:text="@string/n_a"
-                android:layout_marginEnd="6dp"/>
+                android:textSize="20sp" />
         </LinearLayout>
 
         <org.osmdroid.views.MapView android:id="@+id/map"

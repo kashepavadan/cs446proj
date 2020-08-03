@@ -4,7 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@color/colorPrimaryLight">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/exitButton"
+            android:layout_width="102dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:onClick="onExitProfile"
+            android:text="@string/exit"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/container"
@@ -13,13 +34,6 @@
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/container_padding"
         android:paddingVertical="@dimen/container_padding">
-
-        <Button
-            android:id="@+id/exitButton"
-            android:layout_width="102dp"
-            android:layout_height="wrap_content"
-            android:onClick="onExitProfile"
-            android:text="@string/exit" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,15 +58,15 @@
                 android:textStyle="bold" />
 
             <Button
-                android:layout_gravity="center_horizontal"
                 android:id="@+id/editProfileButton"
-                android:textSize="15sp"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:onClick="onEditUsername"
                 android:text="@string/edit"
-                app:icon="@drawable/ic_edit"
-                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                android:onClick="onEditUsername"/>
+                android:textSize="15sp"
+                app:icon="@drawable/ic_edit" />
 
             <LinearLayout
                 android:layout_marginTop="@dimen/margin_small"
@@ -142,8 +156,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onClearRecords"
                 android:text="@string/clear_records"
-                android:onClick="onClearRecords"/>
+                android:textColor="#FFFFFF" />
         </LinearLayout>
 
         <View android:layout_width="match_parent"
@@ -180,6 +196,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:buttonTint="@color/colorPrimary"
                         android:text="@string/walk" />
 
                     <RadioButton
@@ -187,6 +204,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:buttonTint="@color/colorPrimary"
                         android:text="@string/bike" />
 
                     <RadioButton
@@ -194,6 +212,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:buttonTint="@color/colorPrimary"
                         android:text="@string/car" />
                 </RadioGroup>
             </LinearLayout>
@@ -236,8 +255,10 @@
                     android:id="@+id/maxDistanceButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorPrimary"
                     android:onClick="onEditMaxDistance"
-                    android:text="@string/n_a" />
+                    android:text="@string/n_a"
+                    android:textColor="#FFFFFF" />
             </LinearLayout>
 
         </LinearLayout>
@@ -247,19 +268,26 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="@dimen/margin_large">
+
             <Button
                 android:id="@+id/resetProfileButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onResetSettings"
                 android:text="@string/reset_settings"
-                android:onClick="onResetSettings"/>
+                android:textColor="#FFFFFF" />
+
             <Button
                 android:id="@+id/deleteProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onDeleteProfile"
                 android:text="@string/delete_profile"
-                android:onClick="onDeleteProfile"/>
+                android:textColor="#FFFFFF" />
         </LinearLayout>
+    </LinearLayout>
     </LinearLayout>
 </ScrollView>
