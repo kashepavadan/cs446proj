@@ -38,6 +38,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class GameActivity extends AppCompatActivity {
     private static final String SPEEDING_MESSAGE_TEMPLATE = "Your speed is %.2f km/h! This exceeds the speed limit of %s mode (%.2f km/h). The game will end now.";
@@ -183,9 +184,15 @@ public class GameActivity extends AppCompatActivity {
     public void onGameEnded() {
         stopChronometer();
         MapRaceDialog gameEndDialog = MapRaceDialogFactory.getNotificationDialog();
-        String msg = String.format("Congratulations, you've reached the goal! Your time is %d and distance is %d.",
-                gameModel.getElapsedTime(),
-                gameModel.getDistanceWalked());
+
+        long milliseconds = gameModel.getElapsedTime();
+        long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds - TimeUnit.HOURS.toMillis(hours));
+
+        String msg = String.format(Locale.getDefault(), "Congratulations, you've reached the goal! Your time is %d hrs %d mins and distance is %.2f km.",
+                hours,
+                minutes,
+                gameModel.getDistanceWalked() / 1000);
         gameEndDialog.setMessage(msg);
         gameEndDialog.setCanceledOnTouchOutside(false);
         gameEndDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
