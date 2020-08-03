@@ -132,7 +132,7 @@ public class GameModel implements IMyLocationConsumer {
         this.currentSpeed = currentSpeed;
     }
 
-    private float getDistanceWalked() {
+    public float getDistanceWalked() {
         return distanceWalked;
     }
 
@@ -141,7 +141,7 @@ public class GameModel implements IMyLocationConsumer {
         gameActivity.updateDistanceWalked(distanceWalked);
     }
 
-    private long getElapsedTime() {
+    public long getElapsedTime() {
         return elapsedTime;
     }
 
