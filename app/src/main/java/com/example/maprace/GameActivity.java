@@ -183,7 +183,10 @@ public class GameActivity extends AppCompatActivity {
     public void onGameEnded() {
         stopChronometer();
         MapRaceDialog gameEndDialog = MapRaceDialogFactory.getNotificationDialog();
-        gameEndDialog.setMessage("Congratulations, you've reached the goal!");
+        String msg = String.format("Congratulations, you've reached the goal! Your time is %d and distance is %d.",
+                gameModel.getElapsedTime(),
+                gameModel.getDistanceWalked());
+        gameEndDialog.setMessage(msg);
         gameEndDialog.setCanceledOnTouchOutside(false);
         gameEndDialog.setOnPositiveClickListener(new DialogInterface.OnClickListener() {
             @Override
